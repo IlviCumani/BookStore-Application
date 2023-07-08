@@ -1,0 +1,8 @@
+BuyBill
+Xhensil Gjini    : Sat Feb 18 13:09:58 CET 2023
+ISBN-> 9780316029186
+	Quantity 40
+
+---------------------------
+		Total Books: 40 
+		Total Price: 72000.0 		

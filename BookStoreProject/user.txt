@@ -1,0 +1,13 @@
+Emails and passwords for the users of the system
+
+icumani21@epoka.edu.al          12345678
+xgjini21@epoka.edu.al           12345678
+jgjergo21@epoka.edu.al          12345678
+adervishaj21@epoka.edu.Alvi     12345678
+ekuka21@epoka.edu.al            12345678
+mgjini21@epoka.edu.al           12345678
+amjeshtri21@epoka.edu.al        12345678
+acela21@epoka.edu.al            12345678
+Admin                           1
+MAnager                         1
+Librarian                       1

@@ -1,0 +1,11 @@
+PurchaseBill
+Ilvio Cumani    : Sat Jul 08 18:22:51 CEST 2023
+ISBN-> 9780575080086
+	Quantity 45
+
+ISBN-> 9788379696913
+	Quantity 20
+
+---------------------------
+		Total Books: 65 
+		Total Price: 95500.0 		
