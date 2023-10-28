@@ -368,7 +368,6 @@ public class MainPage{
 
 
     public BorderPane getRightBook() {
-
         right = new BorderPane();
         BookInfoHolder = new VBox(10);
         right.setCenter(BookInfoHolder);
@@ -379,20 +378,31 @@ public class MainPage{
         BottomVBox.getChildren().addAll(TotalLabelHbox, purchaseBookBtnHolder);
         purchaseBookBtnHolder.setStyle(styles.getBtnPane());
         purchaseBookBtn = new Button("Purchase Books");
+
+        //! FIXING THIS PART
+        //! FIXING THIS PART
+
         if(worker instanceof Librarian){
-            worker = (Librarian) worker;
+//            worker = (Librarian) worker;
             boolean hasAccess = ((Librarian) worker).isPermitionToBill();
+            System.out.println("THis nigga is " + hasAccess);
             if(!hasAccess){
                 purchaseBookBtn.setDisable(true);
             }
         }
+
         if(worker instanceof Manager){
-            worker = (Manager) worker;
+//            worker = (Manager) worker;
             boolean hasAccess = ((Manager) worker).isPermitionToPurchse();
             if(!hasAccess){
                 addBookToStockBtn.setDisable(true);
             }
         }
+
+
+
+
+
         purchaseBookBtn.setStyle(styles.getLogOutBtnStyle());
         purchaseBookBtnHolder.setAlignment(Pos.BOTTOM_CENTER);
         purchaseBookBtnHolder.getChildren().add(purchaseBookBtn);
