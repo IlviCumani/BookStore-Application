@@ -9,7 +9,7 @@ import java.util.Date;
 public class BuyOrders implements Serializable {
     @Serial
     private static final long serialVersionUID = 529482940413L;
-    transient private ArrayList<String >isbn13;
+    final transient private ArrayList<String >isbn13;
     transient private ArrayList<Integer>quantity;
     private double totalPrice;
     private transient File file = new File("BuyBills.txt");
@@ -21,8 +21,8 @@ public class BuyOrders implements Serializable {
         this.quantity=quantity;
         this.totalPrice = totalPrice;
         this.name=name;
-       if (time==0) this.time=System.currentTimeMillis();
-        writeToFile();
+        if (time==0) this.time=System.currentTimeMillis();
+            writeToFile();
         addToDatabase();
     }
     public double getTotalPrice(){
@@ -62,7 +62,7 @@ public class BuyOrders implements Serializable {
         
         try (PrintWriter writer = new PrintWriter(file)) {
             writer.println("BuyBill");
-            Date temp=new Date(time);
+            Date temp = new Date(time);
             writer.println(name+"    : "+temp.toString());
             for (int index = 0; index < isbn13.size(); index++) {
                 writer.println("ISBN-> " + isbn13.get(index) + "\n\tQuantity " + quantity.get(index) + "\n");

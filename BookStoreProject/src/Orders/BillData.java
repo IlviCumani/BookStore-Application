@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class BillData {
     ArrayList<BuyOrders> buys=new ArrayList<>();
     ArrayList<PurchaseOrders> purchases=new ArrayList<>();
-    File purchasefile=new File("PurchaseBillData.dat");
-    File buyfile=new File("BuysBillData.dat");
+    File purchasefile=new File("BookStoreProject/PurchaseBillData.dat");
+    File buyfile=new File("BookStoreProject/BuysBillData.dat");
     public BillData (){
         readPurchaseBillsData();
         readBuyBillsData();

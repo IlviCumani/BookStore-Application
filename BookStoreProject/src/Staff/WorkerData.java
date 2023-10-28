@@ -17,6 +17,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class WorkerData implements Serializable {
+
     private static final long SerialVersionUID = 19184098341049090l;
     ArrayList<Worker> workerData;
     File file ;
