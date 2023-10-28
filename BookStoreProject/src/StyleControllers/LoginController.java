@@ -42,7 +42,7 @@ public class LoginController{
             Scene scene = new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600);
             primaryStage.setScene(scene);
             primaryStage.setFullScreen(true);
-        }
+            }
             else {
                 wrongPassword = new Label("Wrong Password");
                 wrongPassword.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");

@@ -255,9 +255,9 @@ public class MainPage{
                         BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
                     }
                 }else if(choice.equals("Author")){
-
+                    System.out.println("Autori");
                 }else{
-
+                    System.out.println("Genre");
                 }
 
             }
@@ -630,9 +630,9 @@ public class MainPage{
         grid.add(workerPhoneNumber, 0, 4);
         grid.add(totalSales, 0, 5);
         if(tempworker instanceof Manager||tempworker instanceof Admin)
-        grid.add(totalBuys,0,7);
-        grid.add(deletWorkerBtn, 0, 8);
-        grid.add(editWorkerBtn, 1, 8);
+            grid.add(totalBuys,0,7);
+            grid.add(deletWorkerBtn, 0, 8);
+            grid.add(editWorkerBtn, 1, 8);
         
         return grid;
     }
