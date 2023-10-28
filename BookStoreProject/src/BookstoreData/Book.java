@@ -28,9 +28,9 @@ public class Book implements Serializable {
 		this.description = description;
 		this.paperback = paperback;
         this.stock = stock;
-        for (Genre g: genres) {
-            this.genre.concat(g.toString() + ", ");
-        }
+//        for (Genre g: genres) {
+//            this.genre.concat(g.toString() + ", ");
+//        }
         setIsbn13(isbn13);
 		setTitle(title);
 		setPrice(price);
@@ -124,7 +124,7 @@ public class Book implements Serializable {
     public void setGenres(ArrayList<Genre> genres) {
         String temp = "";
 		for (Genre g: genres) {
-			temp.concat(g.toString() + ", ");
+			temp = temp.concat(g.toString() + ", ");
 		}
 		this.genreP = new SimpleStringProperty(temp);
     }
@@ -133,7 +133,7 @@ public class Book implements Serializable {
 		if(genreP == null) {
 			setGenres(genres);
 		}
-		return genreP.get().toString();
+		return genreP.get();
 	}
 
 	public void setStock (int stock) {

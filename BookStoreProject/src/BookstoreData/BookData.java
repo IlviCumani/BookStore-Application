@@ -1,35 +1,24 @@
 package BookstoreData;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
 import BookstoreData.Book.Genre;
+import Orders.BuyOrders;
+import Orders.PurchaseOrders;
 import Staff.Worker;
-import Orders.*;
 import Style.MainPage;
 import Style.SettingStyles;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class BookData implements Serializable {
 
@@ -46,7 +35,13 @@ public class BookData implements Serializable {
         
         try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream(file))) {
 			Book book;
+			Date the_begining_of_loop = new Date();
 			while(true) {
+				Date the_end_of_loop = new Date();
+				int difference = (int)((the_end_of_loop.getTime() - the_begining_of_loop.getTime())/ 1000);
+				if (difference >= 10) {
+					break;
+				}
 				book = (Book)reader.readObject();
 				books.add(book);
 			}
