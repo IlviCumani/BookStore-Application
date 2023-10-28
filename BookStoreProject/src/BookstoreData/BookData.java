@@ -38,7 +38,7 @@ public class BookData implements Serializable {
 
     public BookData() {
         books = new ArrayList<Book>();
-        file = new File("BookDataFile.dat");
+        file = new File("BookStoreProject/BookDataFile.dat");
             readBookData();
     }
 

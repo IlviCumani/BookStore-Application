@@ -86,11 +86,11 @@ public class MainPage{
 
         if(!(worker instanceof Librarian)){
            int a=0;
-           String names="\n";
+           StringBuilder names= new StringBuilder("\n");
         for (Book b : books.getBooks()) {
             if(Integer.parseInt(b.getStock()) < 5){
                 System.out.println(b.getStock());
-                names+= b.getTitle()+"\n";
+                names.append(b.getTitle()).append("\n");
                 a++;
             }
         }
@@ -252,9 +252,7 @@ public class MainPage{
                     System.out.println("hyri");
                     Book book = books.searchByTitle(content);
                     System.out.println("U gjet libri" + book.getTitle());
-                    if(book != null){
-                        BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
-                    }
+                    BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
                 }else if(choice.equals("Author")){
                     System.out.println("Autori");
                 }else{
@@ -537,8 +535,10 @@ public class MainPage{
                 else if(newAccessLevel.getValue().equals(ACCESSLEVEL.LIBRARIAN)){
                     grid.getChildren().removeAll(newPremitionToCheckLib, newPermitionToPurchaseCheckBox);
                     grid.add(newPremitionToBill, 0, 6);
-                   if (tempworker instanceof Librarian) newPremitionToBill.setSelected(((Librarian) tempworker).isPermitionToBill());
-                    System.out.println(newPremitionToBill.isSelected());
+                    if (tempworker instanceof Librarian) {
+                        newPremitionToBill.setSelected(((Librarian) tempworker).isPermitionToBill());
+                    }
+                        System.out.println(newPremitionToBill.isSelected());
                 }
             }
         });
@@ -632,8 +632,8 @@ public class MainPage{
         grid.add(totalSales, 0, 5);
         if(tempworker instanceof Manager||tempworker instanceof Admin)
             grid.add(totalBuys,0,7);
-            grid.add(deletWorkerBtn, 0, 8);
-            grid.add(editWorkerBtn, 1, 8);
+        grid.add(deletWorkerBtn, 0, 8);
+        grid.add(editWorkerBtn, 1, 8);
         
         return grid;
     }
