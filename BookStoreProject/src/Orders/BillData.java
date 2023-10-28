@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class BillData {
     ArrayList<BuyOrders> buys=new ArrayList<>();
@@ -20,8 +21,13 @@ public class BillData {
         
         try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream(purchasefile))) {
 			PurchaseOrders p;
+            Date dateBeforeExcecTheWhileLoop = new Date();
             while (true){
-                System.out.println("tits");
+                Date dateExcetuingTheWhileLoop = new Date();
+                int difference = (int)((dateExcetuingTheWhileLoop.getTime() - dateBeforeExcecTheWhileLoop.getTime())/1000);
+                if (difference >= 10){
+                    break;
+                }
                 p=(PurchaseOrders)reader.readObject();
                 
                 purchases.add(p);
@@ -39,7 +45,13 @@ public class BillData {
         
         try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream(buyfile))) {
 			BuyOrders p;
+            Date dateBeforeExcecTheWhileLoop = new Date();
             while (true){
+                Date dateExcetuingTheWhileLoop = new Date();
+                int difference = (int)((dateExcetuingTheWhileLoop.getTime() - dateBeforeExcecTheWhileLoop.getTime())/1000);
+                if (difference >= 10){
+                    break;
+                }
                 p=(BuyOrders)reader.readObject();
                 buys.add(p);
             }

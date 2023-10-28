@@ -21,9 +21,7 @@ public class BuyOrders implements Serializable {
         this.quantity=quantity;
         this.totalPrice = totalPrice;
         this.name=name;
-        if (time==0) this.time=System.currentTimeMillis();
-            writeToFile();
-        addToDatabase();
+        this.time = System.currentTimeMillis();writeToFile();addToDatabase();
     }
     public double getTotalPrice(){
         return this.totalPrice;
@@ -42,7 +40,7 @@ public class BuyOrders implements Serializable {
         return quantity;
     }
 
-    private boolean addToDatabase() {
+    private void addToDatabase() {
 		try {
 			FileOutputStream outputStream = new FileOutputStream(filedata,true);
 			ObjectOutputStream writer;
@@ -52,10 +50,9 @@ public class BuyOrders implements Serializable {
 				writer = new ObjectOutputStream(outputStream); 
 			writer.writeObject(new Buy(name, totalPrice, time));
 			writer.close();
-			return true;
-		} catch(IOException ex) {
-			return false;
-		}
+        } catch(IOException ex) {
+            System.out.println("Something Went Wrong");
+        }
 	}
 
     public void writeToFile() {
