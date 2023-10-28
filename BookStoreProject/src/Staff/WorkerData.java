@@ -15,10 +15,11 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class WorkerData implements Serializable {
 
-    private static final long SerialVersionUID = 19184098341049090l;
+    private static final long SerialVersionUID = 19184098341049090L;
     ArrayList<Worker> workerData;
     File file ;
 
@@ -33,7 +34,13 @@ public class WorkerData implements Serializable {
         
         try(ObjectInputStream reader = new ObjectInputStream(new FileInputStream(file))) {
 			Worker worker;
+            Date dateBeforeTheBeginingOfLoop = new Date();
 			while(true) {
+                Date dateAfterTheEndOfLoop = new Date();
+                int difference = (int)((dateAfterTheEndOfLoop.getTime() - dateBeforeTheBeginingOfLoop.getTime())/ 1000);
+                if (difference >= 10) {
+                    break;
+                }
 				worker = (Worker)reader.readObject();
                 if (worker instanceof Librarian)
 				    workerData.add((Librarian)worker);

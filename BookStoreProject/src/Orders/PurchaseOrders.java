@@ -22,7 +22,7 @@ public class PurchaseOrders implements Serializable{
         this.quantity=quantity;
         this.totalPrice = totalPrice;
         this.name=name;
-        if(time==0) this.time=System.currentTimeMillis();
+        this.time=System.currentTimeMillis();
         writeToFile();
         addToDatabase();
     }
