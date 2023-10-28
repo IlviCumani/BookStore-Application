@@ -35,9 +35,10 @@ public class WorkerData implements Serializable {
 
     public WorkerData() {
      
-     file= new File("workers.dat");
+     file= new File("BookStoreProject/workers.dat");
      workerData=new ArrayList<>();
      readWorkerData();
+     System.out.println(workerData.size());
     }
     public void readWorkerData() {
         
@@ -46,11 +47,11 @@ public class WorkerData implements Serializable {
 			while(true) {
 				worker = (Worker)reader.readObject();
                 if (worker instanceof Librarian)
-				workerData.add((Librarian)worker);
+				    workerData.add((Librarian)worker);
                 if (worker instanceof Manager)
-				workerData.add((Manager)worker);
+				    workerData.add((Manager)worker);
                 if (worker instanceof Admin)
-				workerData.add((Admin)worker);
+				    workerData.add((Admin)worker);
 			}
 		} catch (EOFException e) {
 			System.out.println("Read all the books from the file");

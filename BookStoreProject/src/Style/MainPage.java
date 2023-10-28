@@ -76,6 +76,7 @@ public class MainPage{
 
 
     public MainPage(Stage primaryStage, Worker worker) {
+        System.out.println("We are in main page");
         this.primaryStage = primaryStage;
         root = new BorderPane();
         this.worker=worker;
@@ -118,9 +119,9 @@ public class MainPage{
         PersonalInfo = new VBox(25);
         Image profileImage;
         if(worker.getGender().equals(Gender.FEMALE)){
-            profileImage = new Image(new FileInputStream("src\\Images\\Woman.png"));
+            profileImage = new Image(new FileInputStream("BookStoreProject/src/Images/woman.png"));
         }else{
-            profileImage = new Image(new FileInputStream("src\\Images\\Man.png"));
+            profileImage = new Image(new FileInputStream("BookStoreProject/src/Images/man.png"));
         }
 
         Circle circle = new Circle(125, 125, 125);
