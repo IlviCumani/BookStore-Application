@@ -1,14 +1,26 @@
 package StaffFolder.AccessLevels;
 
+import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.AddNewWorker.NoPermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
+import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.FireWorker.NoPermissionToFireWorker;
 import StaffFolder.Worker;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.*;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.*;
 
+import java.util.ArrayList;
+
 public class Manager implements AccessLevel{
     private SellBooksBehaviour sellBooksBehaviour;
     private ResupplyStockBehaviour resupplyStockBehaviour;
     private AddNewBooksBehaviour addNewBooksBehaviour;
+
+    private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
+
+    private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
+
 //    private CheckWorkersBehaviour checkWorkersBehaviour;
 
     public Manager(){
@@ -65,6 +77,16 @@ public class Manager implements AccessLevel{
     @Override
     public Book addNewBook(String title, String ISBN13, String author, String genre, String publisher, double price, boolean isPaperback){
         return addNewBooksBehaviour.addNewBooks(title, ISBN13, author, genre, publisher, price, isPaperback);
+    }
+
+    @Override
+    public boolean fireWorker(ArrayList<Worker> listOfWorkers, Worker worker)throws PermissionDeniedException {
+        return FIRE_WORKER_BEHAVIOUR.fireWorker(listOfWorkers, worker);
+    }
+
+    @Override
+    public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) throws PermissionDeniedException {
+        ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
     }
 
 //    @Override

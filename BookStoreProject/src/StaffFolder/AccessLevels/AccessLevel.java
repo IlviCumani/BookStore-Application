@@ -1,9 +1,12 @@
 package StaffFolder.AccessLevels;
 
 import BookstoreData.*;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.Worker;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.*;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.*;
+
+import java.util.ArrayList;
 
 public interface AccessLevel {
     public String getAccessLevel();
@@ -16,5 +19,10 @@ public interface AccessLevel {
     public void setSellBooksBehaviour(SellBooksBehaviour sellBooksBehaviour);
     public void setResupplyStockBehaviour(ResupplyStockBehaviour resupplyStockBehaviour);
     public void setAddNewBooksBehaviour(AddNewBooksBehaviour addNewBooksBehaviour);
+
+    public boolean fireWorker(ArrayList<Worker> listOfWorkers, Worker worker) throws PermissionDeniedException;
 //!    public void setCheckWorkersBehaviour(CheckWorkersBehaviour checkWorkersBehaviour);
+
+    public void addNewWorker(ArrayList<Worker> listOfWorker, Worker worker) throws PermissionDeniedException;
+
 }

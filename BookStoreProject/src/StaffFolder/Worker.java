@@ -23,6 +23,10 @@ public class Worker {
         this.salary = salary;
     }
 
+    public Worker() {
+
+    }
+
     public String getFullname() {
         return fullname;
     }

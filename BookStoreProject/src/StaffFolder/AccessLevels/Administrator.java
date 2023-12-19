@@ -1,16 +1,28 @@
 package StaffFolder.AccessLevels;
 
 import BookstoreData.Book;
+import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.AddNewWorker.PermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
+import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.FireWorker.PermissionToFireWorker;
 import StaffFolder.Worker;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.*;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.*;
+
+import java.util.ArrayList;
 
 public class Administrator implements AccessLevel{
 
     private final SellBooksBehaviour sellBooksBehaviour = new PermissionToSellBooks();
     private final ResupplyStockBehaviour resupplyStockBehaviour = new PermissionToResupply();
     private final AddNewBooksBehaviour addNewBooksBehaviour = new PermissionToAddNewBook();
-//    private final CheckWorkersBehaviour checkWorkersBehaviour = new AdminCheckWorkers();
+
+    private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new PermissionToFireWorker();
+
+    private final PermissionToAddNewWorker ADD_NEW_WORKER_BEHAVIOUR = new PermissionToAddNewWorker();
+
+    //    private final CheckWorkersBehaviour checkWorkersBehaviour = new AdminCheckWorkers();
 
     @Override
     public void sellBooks(Book book , int amount){
@@ -65,5 +77,15 @@ public class Administrator implements AccessLevel{
     @Override
     public String getAccessLevel() {
         return "Administrator";
+    }
+
+    @Override
+    public boolean fireWorker(ArrayList<Worker> listOfWorker, Worker worker) throws PermissionDeniedException {
+        return FIRE_WORKER_BEHAVIOUR.fireWorker(listOfWorker, worker);
+    }
+
+    @Override
+    public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) {
+        ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
     }
 }

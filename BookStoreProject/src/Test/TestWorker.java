@@ -1,25 +1,42 @@
 package Test;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.*;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.NoPermissionToAddNewBooks;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToAddNewBook;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToResupply;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.NoPermissionToSellBooks;
 import StaffFolder.Worker;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestWorker {
-    Worker librarian = new Worker("Lib", "librarian", "12345678", "0675850510", null, new Librarian(), 500);
-    Worker manager = new Worker("manager", "manager", "12345678", "0675850510", null, new Manager(), 700);
-    Worker admin = new Worker("admin", "admin", "12345678", "0675850510", null, new Administrator(), 1000);
-    ArrayList<Book> bookList = new ArrayList<Book>();
+    Worker librarian;//new Worker("Lib", "librarian", "12345678", "0675850510", null, new Librarian(), 500);
+    Worker manager;// = new Worker("manager", "manager", "12345678", "0675850510", null, new Manager(), 700);
+    Worker admin; //= new Worker("admin", "admin", "12345678", "0675850510", null, new Administrator(), 1000);
+    ArrayList<Book> bookList; //= new ArrayList<Book>();
+    ArrayList<Worker> listOfWorkers;
+    @BeforeEach
+    void setUp() {
+        this.librarian = new Worker("Lib", "librarian", "12345678", "0675850510", null, new Librarian(), 500);
+        this.manager = new Worker("manager", "manager", "12345678", "0675850510", null, new Manager(), 700);
+        this.admin = new Worker("admin", "admin", "12345678", "0675850510", null, new Administrator(), 1000);
+        this.bookList = new ArrayList<>();
+        this.listOfWorkers = new ArrayList<>();
+        Worker[] workers = {librarian, manager, admin};
+        this.listOfWorkers.addAll(List.of(workers));
+    }
 
-    private void loadBooks() {
+    @BeforeEach
+    public void loadBooks() {
         bookList.add(new Book("To Kill a Mockingbird", "9780061120084", "Harper Lee", "Fiction", "HarperCollins", 12.99, true));
         bookList.add(new Book("1984", "9780451524935", "George Orwell", "Dystopian", "Signet Classics", 9.99, true));
         bookList.add(new Book("The Great Gatsby", "9780743273565", "F. Scott Fitzgerald", "Classics", "Scribner", 10.99, true));
@@ -34,14 +51,14 @@ public class TestWorker {
 
     @Test
     public void test_LibrarianWithPermissionToSellBooks() {
-        loadBooks();
+//        loadBooks();
         librarian.getAccessLevel().sellBooks(bookList.get(0), 30);
         assertEquals(70, bookList.get(0).getNrBookInStock());
     }
 
     @Test
     public void test_LibrarianWithoutPermissionToSellBooks() {
-        loadBooks();
+//        loadBooks();
         librarian.getAccessLevel().setSellBooksBehaviour(new NoPermissionToSellBooks());
         assertThrows(IllegalStateException.class, () -> {
             librarian.getAccessLevel().sellBooks(bookList.get(0), 30);
@@ -50,7 +67,7 @@ public class TestWorker {
 
     @Test
     public void test_LibrarianResupplyBooks() {
-        loadBooks();
+//        loadBooks();
         librarian.getAccessLevel().setResupplyStockBehaviour(new PermissionToResupply());
         assertThrows(IllegalStateException.class, () -> {
             librarian.getAccessLevel().resupplyStock(bookList.get(0), 30);
@@ -59,7 +76,7 @@ public class TestWorker {
 
     @Test
     public void test_SellingMoreBooksThanInStock() {
-        loadBooks();
+//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
             librarian.getAccessLevel().sellBooks(bookList.get(0), 130);
         });
@@ -74,7 +91,7 @@ public class TestWorker {
 
     @Test
     public void test_ManagerAddNewBook(){
-        loadBooks();
+//        loadBooks();
         Book newBook = manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
         bookList.add(newBook);
         assertEquals(11, bookList.size());
@@ -82,7 +99,7 @@ public class TestWorker {
 
     @Test
     public void test_ManagerNoPermissionToAddNewBook() {
-        loadBooks();
+//        loadBooks();
         manager.getAccessLevel().setAddNewBooksBehaviour(new NoPermissionToAddNewBooks());
         assertThrows(IllegalStateException.class, () -> {
             manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
@@ -91,25 +108,77 @@ public class TestWorker {
 
     @Test
     public void test_addNewBookWithInvalidISBN() {
-        loadBooks();
+//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
-            manager.getAccessLevel().addNewBook("The Lord of the Rings", "I Was Made For Lovin' Your Boobs", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
+            manager.getAccessLevel().addNewBook("The Lord of the Rings", "Hello Friend", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
         });
     }
 
     @Test
     public void test_addNewBookWithInvalidPrice(){
-        loadBooks();
+//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
             manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", -29.99, false);
         });
     }
 
     @Test
-    public void test_(){
-
+    public void test_adminFiresLibrarianWorker() throws PermissionDeniedException {
+        assertTrue(admin.getAccessLevel().fireWorker(listOfWorkers, librarian));
     }
 
+    @Test
+    public void test_adminFirestManagerWorker() throws PermissionDeniedException {
+        assertTrue(admin.getAccessLevel().fireWorker(listOfWorkers, manager));
+    }
+
+    @Test
+    public void test_adminFirestAnotherAdminWorker(){
+        assertThrows(IllegalArgumentException.class, () -> {
+           admin.getAccessLevel().fireWorker(listOfWorkers, admin);
+        });
+    }
+
+    @Test
+    public void test_adminFiresAWorkerThatIsNotInTheList() throws PermissionDeniedException{
+        assertFalse(admin.getAccessLevel().fireWorker(listOfWorkers, new Worker()));
+    }
+
+    @Test
+    public void test_managerFirestAWorker() {
+        assertThrows(PermissionDeniedException.class, () -> {
+           manager.getAccessLevel().fireWorker(listOfWorkers, librarian);
+        });
+    }
+
+    @Test
+    public void test_librarianFirestAWorker() {
+        assertThrows(PermissionDeniedException.class, () -> {
+            librarian.getAccessLevel().fireWorker(listOfWorkers, manager);
+        });
+    }
+
+    @Test
+    public void test_adminAddsNewWorker() throws PermissionDeniedException{
+        int oldListSize = listOfWorkers.size();
+        admin.getAccessLevel().addNewWorker(listOfWorkers, new Worker());
+        int newListSize = listOfWorkers.size();
+        assertEquals(oldListSize + 1, newListSize);
+    }
+
+    @Test
+    public void test_managerAddsNewWorker() {
+        assertThrows(PermissionDeniedException.class, () -> {
+            manager.getAccessLevel().addNewWorker(listOfWorkers, new Worker());
+        });
+    }
+
+    @Test
+    public void test_librarianAddsNewWorker() {
+        assertThrows(PermissionDeniedException.class, () -> {
+            librarian.getAccessLevel().addNewWorker(listOfWorkers, new Worker());
+        });
+    }
 
 
 
