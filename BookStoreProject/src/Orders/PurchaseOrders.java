@@ -67,7 +67,6 @@ public class PurchaseOrders implements Serializable{
             writer.println(name+"    : "+temp.toString());
             for (int index = 0; index < isbn13.size(); index++) {
                 writer.println("ISBN-> " + isbn13.get(index) + "\n\tQuantity " + quantity.get(index) + "\n");
-
             }
 
             writer.println("---------------------------");

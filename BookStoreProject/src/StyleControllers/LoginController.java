@@ -19,26 +19,26 @@ public class LoginController{
 
         WorkerData workerData = new WorkerData();
         SettingStyles styles = new SettingStyles();
-            
+
         boolean emailExists=false;
         Worker temp = workerData.getWorkerFromEmail(email);
         center.getChildren().remove(wrongPassword);
         center.getChildren().remove(wrongEmail);
-        if(temp!=null){ 
+        if(temp!=null){
             emailExists=true;
         }
         if(emailExists){
-                
+
         if(temp.getPassword().equals(password)){
             Worker worker;
-                    
+
             if(temp.getACCESSLEVEL().equals(Worker.ACCESSLEVEL.ADMIN)){
                 worker = new Admin(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getSalary(), temp.getDateOfBirth(), temp.getGender(),temp.getPassword(), temp.getACCESSLEVEL());
             }else if(temp.getACCESSLEVEL().equals(Worker.ACCESSLEVEL.LIBRARIAN)){
                 worker = new Librarian(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getDateOfBirth(),  temp.getGender(),temp.getSalary(), temp.getPassword(), temp.getACCESSLEVEL(), ((Librarian) temp).isPermitionToBill());
             }else{
                 worker = new Manager(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getSalary(), temp.getDateOfBirth(), temp.getGender(), temp.getPassword(), temp.getACCESSLEVEL(), ((Manager) temp).isPermitionToPurchse(), ((Manager) temp).isCheckLibrarians());
-            } 
+            }
             Scene scene = new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600);
             primaryStage.setScene(scene);
             primaryStage.setFullScreen(true);
@@ -54,6 +54,7 @@ public class LoginController{
             wrongEmail.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
             center.add(wrongEmail, 0, 4);
         }
+
     }
             
 } 

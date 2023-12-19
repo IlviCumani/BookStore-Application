@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="testfx.junit5" type="repository">
+    <properties maven-id="org.testfx:testfx-junit5:4.0.17" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-junit5/4.0.17/testfx-junit5-4.0.17.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-core/4.0.17/testfx-core-4.0.17.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest/2.1/hamcrest-2.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/assertj/assertj-core/3.13.2/assertj-core-3.13.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-junit5/4.0.17/testfx-junit5-4.0.17-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-core/4.0.17/testfx-core-4.0.17-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest/2.1/hamcrest-2.1-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/assertj/assertj-core/3.13.2/assertj-core-3.13.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-junit5/4.0.17/testfx-junit5-4.0.17-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/testfx/testfx-core/4.0.17/testfx-core-4.0.17-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/osgi/org.osgi.core/6.0.0/org.osgi.core-6.0.0-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/hamcrest/hamcrest/2.1/hamcrest-2.1-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/assertj/assertj-core/3.13.2/assertj-core-3.13.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

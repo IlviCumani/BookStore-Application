@@ -1,6 +1,6 @@
 package BookstoreData;
 
-import BookstoreData.Book.Genre;
+//import BookstoreData.Book.Genre;
 import Orders.BuyOrders;
 import Orders.PurchaseOrders;
 import Staff.Worker;
@@ -92,33 +92,45 @@ public class BookData implements Serializable {
 		HBox hbox = new HBox(10);
 		hbox.getChildren().addAll(rbPaperback, rbEbook);
 		
-		Label descriptionLbl = new Label("Description");
-		TextArea descriptionTA = new TextArea();
-		descriptionTA.setStyle("-fx-background-color: #0E273C; -fx-text-fill: #0E273C; -fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-border-color: #35CE8D; -fx-border-width: 3px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-padding: 5px;");
-		descriptionTA.setPrefColumnCount(20);
-		descriptionTA.setPrefRowCount(5);
-		descriptionTA.setWrapText(true);
+//		Label descriptionLbl = new Label("Description");
+//		TextArea descriptionTA = new TextArea();
+//		descriptionTA.setStyle("-fx-background-color: #0E273C; -fx-text-fill: #0E273C; -fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-border-color: #35CE8D; -fx-border-width: 3px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-padding: 5px;");
+//		descriptionTA.setPrefColumnCount(20);
+//		descriptionTA.setPrefRowCount(5);
+//		descriptionTA.setWrapText(true);
 		
 		
 		Label authosLbl = new Label("Select an author: ");
 		TextField authorTF = new TextField();
 		authorTF.setStyle(settingStyles.getLoginTextFieldStyle());
 		authorTF.setPromptText("Author");
-		// genres
-		VBox paneForGenres = new VBox(10);
-		paneForGenres.setPadding(new Insets(4));
-		ArrayList<CheckBox> genreCheckboxes = new ArrayList<>();
-		for(Genre g : Genre.values()) {
-			genreCheckboxes.add(new CheckBox(g.toString()));
-		}
-		paneForGenres.getChildren().addAll(genreCheckboxes);
+
 		Label genreLbl = new Label("Genres: ");
+		TextField genreTF = new TextField();
+		genreTF.setStyle(settingStyles.getLoginTextFieldStyle());
+		genreTF.setPromptText("Genres");
+
+		Label publisherLbl = new Label("Publisher: ");
+		TextField publisherTF = new TextField();
+		publisherTF.setStyle(settingStyles.getLoginTextFieldStyle());
+		publisherTF.setPromptText("Publisher");
+
+
+		// genres
+//		VBox paneForGenres = new VBox(10);
+//		paneForGenres.setPadding(new Insets(4));
+//		ArrayList<CheckBox> genreCheckboxes = new ArrayList<>();
+//		for(Genre g : Genre.values()) {
+//			genreCheckboxes.add(new CheckBox(g.toString()));
+//		}
+//		paneForGenres.getChildren().addAll(genreCheckboxes);
+//		Label genreLbl = new Label("Genres: ");
 		
 		Button submitBtn = new Button("Submit");
 		submitBtn.setStyle(settingStyles.getLogOutBtnStyle());
 
 		submitBtn.setOnAction(e -> {
-			if(titleTF.getText().isEmpty() || isbnTF.getText().isEmpty() || priceTF.getText().isEmpty() || descriptionTA.getText().isEmpty() || authorTF.getText().isEmpty()) {
+			if(titleTF.getText().isEmpty() || isbnTF.getText().isEmpty() || priceTF.getText().isEmpty() || /*descriptionTA.getText().isEmpty() ||*/ authorTF.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Error");
 				alert.setHeaderText("Error");
@@ -136,15 +148,19 @@ public class BookData implements Serializable {
 				String isbn13 = isbnTF.getText();
 				String title = titleTF.getText();
 				float price = Float.parseFloat(priceTF.getText());
-				String description = descriptionTA.getText();
+//				String description = descriptionTA.getText();
+				String publisher = publisherTF.getText();
+				String genre = genreTF.getText();
 				String author = authorTF.getText();
 				boolean isPaperback = rbPaperback.isSelected();
-				Book newBook = new Book(isbn13, title, description, price, author, isPaperback,0);
-				for(int i=0; i < genreCheckboxes.size(); i++) {
-					if(genreCheckboxes.get(i).isSelected())
-						newBook.addGenre(Genre.values()[i]);
-						
-				}
+//				Book newBook = new Book(isbn13, title /* description*/, price, author, isPaperback,0);
+				Book newBook = new Book(title, isbn13, author, genre, publisher, price, isPaperback);
+//				for(int i=0; i < genreCheckboxes.size(); i++) {
+//					if(genreCheckboxes.get(i).isSelected())
+//						newBook.addGenre(Genre.values()[i]);
+//
+//				}
+
 				boolean res = writeBookToFile(newBook);
 				books.add(newBook);
 				primaryStage.setScene(new Scene(new MainPage(primaryStage, temp).getRoot()));
@@ -158,9 +174,9 @@ public class BookData implements Serializable {
 		pane.add(isbnTF, 1, 1);
 		pane.add(priceTF, 1, 2);
 		pane.add(hbox, 1, 3);
-		pane.add(descriptionTA, 1, 4);
+		pane.add(publisherTF, 1, 4);
 		pane.add(authorTF, 1, 5);
-		pane.add(paneForGenres, 1, 6);
+		pane.add(genreTF, 1, 6);
 		pane.add(submitBtn, 1, 7);
 		
 		Scene scene = new Scene(pane, 700, 700);
@@ -213,7 +229,7 @@ public class BookData implements Serializable {
 			book.addStock((int)buyOreder.getQuantity().get(index));
 		 }
 		 rewirteFile();
-		
+
 	}
 
 	public void removeBooksFromStock(PurchaseOrders sellOrder) {
@@ -223,9 +239,10 @@ public class BookData implements Serializable {
 		}
 		rewirteFile();
 	}
+
 	public Book getBook(String isbn) {
 		for (Book book : books) {
-			if (book.getIsbn13().equals(isbn))
+			if (book.getBookISBN13().equals(isbn))
 				return book;
 		}
 		return null;
@@ -233,16 +250,16 @@ public class BookData implements Serializable {
 
 
     public ArrayList<Book> getFromName(String name){
-        ArrayList<Book> temp=new ArrayList<>();    
+        ArrayList<Book> temp=new ArrayList<>();
         for (Book book : books) {
-                if (book.getTitle().contains(name))temp.add(book);
+                if (book.getBookTitle().contains(name))temp.add(book);
             }
             return temp;
     }
 
 	public Book searchByTitle(String title){
 		for( Book b: books){
-			if(b.getTitle().equals(title)){
+			if(b.getBookTitle().equals(title)){
 				return b;
 			}
 		}
@@ -254,7 +271,7 @@ public class BookData implements Serializable {
     }
 
 	public int getBookQuantity(String isbn) {
-		return getBook(isbn).getStockInt();
+		return getBook(isbn).getNrBookInStock();
 	}
 }
 

@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 
 public class MainPage{
 
-    private BorderPane root;
+    private final BorderPane root;
     private HBox top;
     private VBox PersonalInfo;
     private Stage primaryStage;
@@ -88,9 +88,9 @@ public class MainPage{
            int a=0;
            StringBuilder names= new StringBuilder("\n");
         for (Book b : books.getBooks()) {
-            if(Integer.parseInt(b.getStock()) < 5){
-                System.out.println(b.getStock());
-                names.append(b.getTitle()).append("\n");
+            if(b.getNrBookInStock() < 5){
+                System.out.println(b.getNrBookInStock());
+                names.append(b.getBookTitle()).append("\n");
                 a++;
             }
         }
@@ -251,7 +251,7 @@ public class MainPage{
                 if(choice.equals("Title")){
                     System.out.println("hyri");
                     Book book = books.searchByTitle(content);
-                    System.out.println("U gjet libri" + book.getTitle());
+                    System.out.println("U gjet libri" + book.getBookTitle());
                     BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
                 }else if(choice.equals("Author")){
                     System.out.println("Autori");
@@ -433,11 +433,11 @@ public class MainPage{
         grid.setHgap(20);
         grid.setVgap(20);
 
-        Label bookISBN = new Label(book.getIsbn13());
-        bookIsbns.add(book.getIsbn13());
-        prices.add(Double.parseDouble(book.getPrice()));
+        Label bookISBN = new Label(book.getBookISBN13());
+        bookIsbns.add(book.getBookISBN13());
+        prices.add(book.getBookPrice());
         bookISBN.setStyle(styles.getSalesLabel());
-        Label bookPrice = new Label("" + book.getPrice());
+        Label bookPrice = new Label("" + book.getBookPrice());
         bookPrice.setStyle(styles.getSalesLabel());
         TextField nrBooks = new TextField();
         nrBooks.setPrefHeight(20);
@@ -454,7 +454,7 @@ public class MainPage{
                 grid.add(total, 1, 1);
                 Label totalLabel = new Label("Total: " + TotalBookPrice);
                 totalLabel.setStyle(styles.getSalesLabel());
-                if(TotalLabelHbox.getChildren().size() != 0){
+                if(!TotalLabelHbox.getChildren().isEmpty()){
                     TotalLabelHbox.getChildren().clear();;
                 }
                 TotalLabelHbox.getChildren().add(totalLabel);
@@ -522,11 +522,7 @@ public class MainPage{
         CheckBox newPremitionToBill = new CheckBox("Permition to bill");
 
         newPremitionToBill.setOnAction(e->{
-            if(newPremitionToBill.isSelected()){
-                permitionToBill = true;
-            } else {
-                permitionToBill = false;
-            }
+            permitionToBill = newPremitionToBill.isSelected();
             System.out.println(permitionToBill);
         });
 

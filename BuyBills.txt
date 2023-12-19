@@ -1,0 +1,8 @@
+BuyBill
+Admin    : Sat Dec 16 11:18:11 CET 2023
+ISBN-> 9780061120084
+	Quantity 50
+
+---------------------------
+		Total Books: 50 
+		Total Price: 649.5 		

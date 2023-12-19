@@ -1,0 +1,8 @@
+PurchaseBill
+Admin    : Sat Oct 28 12:11:35 CEST 2023
+ISBN-> 9780547928227
+	Quantity 80
+
+---------------------------
+		Total Books: 80 
+		Total Price: 160000.0 		
