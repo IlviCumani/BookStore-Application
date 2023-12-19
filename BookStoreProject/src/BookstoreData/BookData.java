@@ -223,22 +223,22 @@ public class BookData implements Serializable {
 		}
 	}
 
-    public void addBooksToStock(BuyOrders buyOreder) {
-         for (int index = 0; index < buyOreder.getIsbns().size(); index++) {
-			Book book = getBook(buyOreder.getIsbns().get(index));
-			book.addStock((int)buyOreder.getQuantity().get(index));
-		 }
-		 rewirteFile();
+//    public void addBooksToStock(BuyOrders buyOreder) {
+//         for (int index = 0; index < buyOreder.getIsbns().size(); index++) {
+//			Book book = getBook(buyOreder.getIsbns().get(index));
+//			book.addStock((int)buyOreder.getQuantity().get(index));
+//		 }
+//		 rewirteFile();
+//
+//	}
 
-	}
-
-	public void removeBooksFromStock(PurchaseOrders sellOrder) {
-		for (int index = 0; index < sellOrder.getIsbns().size(); index++) {
-			Book book = getBook(sellOrder.getIsbns().get(index));
-			book.removeStock(sellOrder.getQuantity().get(index));
-		}
-		rewirteFile();
-	}
+//	public void removeBooksFromStock(PurchaseOrders sellOrder) {
+//		for (int index = 0; index < sellOrder.getIsbns().size(); index++) {
+//			Book book = getBook(sellOrder.getIsbns().get(index));
+//			book.removeStock(sellOrder.getQuantity().get(index));
+//		}
+//		rewirteFile();
+//	}
 
 	public Book getBook(String isbn) {
 		for (Book book : books) {

@@ -11,7 +11,7 @@ public interface AccessLevel {
     public void sellBooks(Book book , int amount);
     public void resupplyStock(Book book, int amount);
     public  void resupplyStock(Book book);
-    public Book addNewBook();
+    public Book addNewBook(String title, String ISBN13, String author, String genre, String publisher, double price, boolean isPaperback);
 //!    public void checkWorker(Worker worker);
     public void setSellBooksBehaviour(SellBooksBehaviour sellBooksBehaviour);
     public void setResupplyStockBehaviour(ResupplyStockBehaviour resupplyStockBehaviour);

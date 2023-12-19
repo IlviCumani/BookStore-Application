@@ -301,7 +301,7 @@ public class MainPage{
                 }
             }
 
-            books.addBooksToStock(new BuyOrders(bookIsbns, quantity,TotalBookPrice,worker.getFullName()));
+//            books.addBooksToStock(new BuyOrders(bookIsbns, quantity,TotalBookPrice,worker.getFullName()));
             BookInfoHolder.getChildren().clear();
             primaryStage.setScene(new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600));
             primaryStage.setFullScreen(true);
@@ -335,7 +335,7 @@ public class MainPage{
         }
 
         PurchaseOrders purchase = new PurchaseOrders(bookIsbns, quantity, TotalBookPrice, worker.getFullName());
-        books.removeBooksFromStock(purchase);
+//        books.removeBooksFromStock(purchase);
         worker.addPurchases(purchase.getTotalPrice());
         workers.rewirteFile();
         BookInfoHolder.getChildren().clear();

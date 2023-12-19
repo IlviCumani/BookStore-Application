@@ -63,8 +63,8 @@ public class Manager implements AccessLevel{
     }
 
     @Override
-    public Book addNewBook(){
-        return addNewBooksBehaviour.addNewBooks();
+    public Book addNewBook(String title, String ISBN13, String author, String genre, String publisher, double price, boolean isPaperback){
+        return addNewBooksBehaviour.addNewBooks(title, ISBN13, author, genre, publisher, price, isPaperback);
     }
 
 //    @Override
