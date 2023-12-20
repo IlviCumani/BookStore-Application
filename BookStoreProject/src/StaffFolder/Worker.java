@@ -1,9 +1,10 @@
 package StaffFolder;
 
+import java.io.Serializable;
 import java.util.Date;
 import StaffFolder.AccessLevels.*;
 
-public class Worker {
+public class Worker implements Serializable {
     private String fullname;
     private String email;
     private String password;
