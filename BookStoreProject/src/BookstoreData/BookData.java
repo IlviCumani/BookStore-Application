@@ -52,8 +52,6 @@ public class BookData implements Serializable {
 		} catch(IOException e) {
 			System.out.println("Error reading from file");
 		}
-        
-        
     }
 	
     public void newBookForm(Stage primaryStage, Worker temp) {
@@ -98,8 +96,7 @@ public class BookData implements Serializable {
 //		descriptionTA.setPrefColumnCount(20);
 //		descriptionTA.setPrefRowCount(5);
 //		descriptionTA.setWrapText(true);
-		
-		
+
 		Label authosLbl = new Label("Select an author: ");
 		TextField authorTF = new TextField();
 		authorTF.setStyle(settingStyles.getLoginTextFieldStyle());

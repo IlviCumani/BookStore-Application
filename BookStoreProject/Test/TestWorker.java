@@ -1,17 +1,16 @@
-package Test;
 import BookstoreData.Book;
-import StaffFolder.AccessLevels.*;
+import StaffFolder.AccessLevels.Administrator;
+import StaffFolder.AccessLevels.Librarian;
+import StaffFolder.AccessLevels.Manager;
+
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.NoPermissionToAddNewBooks;
-import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToAddNewBook;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToResupply;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.NoPermissionToSellBooks;
-import StaffFolder.Worker;
 
-import org.junit.jupiter.api.BeforeAll;
+import StaffFolder.Worker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,24 +49,21 @@ public class TestWorker {
     }
 
     @Test
-    public void test_LibrarianWithPermissionToSellBooks() {
-//        loadBooks();
+    public void test_LibrarianWithPermissionToSellBooks() throws PermissionDeniedException {
         librarian.getAccessLevel().sellBooks(bookList.get(0), 30);
         assertEquals(70, bookList.get(0).getNrBookInStock());
     }
 
     @Test
     public void test_LibrarianWithoutPermissionToSellBooks() {
-//        loadBooks();
-        librarian.getAccessLevel().setSellBooksBehaviour(new NoPermissionToSellBooks());
-        assertThrows(IllegalStateException.class, () -> {
+        librarian.getAccessLevel().setSellBookBehaviour(new NoPermissionToSellBooks());
+        assertThrows(PermissionDeniedException.class, () -> {
             librarian.getAccessLevel().sellBooks(bookList.get(0), 30);
         });
     }
 
     @Test
     public void test_LibrarianResupplyBooks() {
-//        loadBooks();
         librarian.getAccessLevel().setResupplyStockBehaviour(new PermissionToResupply());
         assertThrows(IllegalStateException.class, () -> {
             librarian.getAccessLevel().resupplyStock(bookList.get(0), 30);
@@ -76,7 +72,6 @@ public class TestWorker {
 
     @Test
     public void test_SellingMoreBooksThanInStock() {
-//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
             librarian.getAccessLevel().sellBooks(bookList.get(0), 130);
         });
@@ -84,14 +79,12 @@ public class TestWorker {
 
     @Test
     public void test_ManagerResupplyBooks() {
-        loadBooks();
         manager.getAccessLevel().resupplyStock(bookList.get(0), 30);
         assertEquals(130, bookList.get(0).getNrBookInStock());
     }
 
     @Test
     public void test_ManagerAddNewBook(){
-//        loadBooks();
         Book newBook = manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
         bookList.add(newBook);
         assertEquals(11, bookList.size());
@@ -99,7 +92,6 @@ public class TestWorker {
 
     @Test
     public void test_ManagerNoPermissionToAddNewBook() {
-//        loadBooks();
         manager.getAccessLevel().setAddNewBooksBehaviour(new NoPermissionToAddNewBooks());
         assertThrows(IllegalStateException.class, () -> {
             manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
@@ -108,7 +100,6 @@ public class TestWorker {
 
     @Test
     public void test_addNewBookWithInvalidISBN() {
-//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
             manager.getAccessLevel().addNewBook("The Lord of the Rings", "Hello Friend", "J.R.R. Tolkien", "Fantasy", "Mariner Books", 29.99, false);
         });
@@ -116,7 +107,6 @@ public class TestWorker {
 
     @Test
     public void test_addNewBookWithInvalidPrice(){
-//        loadBooks();
         assertThrows(IllegalArgumentException.class, () -> {
             manager.getAccessLevel().addNewBook("The Lord of the Rings", "9780545010221", "J.R.R. Tolkien", "Fantasy", "Mariner Books", -29.99, false);
         });

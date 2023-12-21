@@ -56,13 +56,12 @@ public class WorkerData implements Serializable {
 		} catch(IOException e) {
 			System.out.println("Error reading from file");
 		}
-        
-    
     }
     public void deleteWorker(Worker worker) {
         workerData.remove(worker);
         rewirteFile();
     }
+
     public boolean rewirteFile() {
 		try {
 			
@@ -77,6 +76,7 @@ public class WorkerData implements Serializable {
 			return false;
 		}
 	}
+
     private boolean writeWorkerToFile(Worker newWorker) {
 		try {
 			

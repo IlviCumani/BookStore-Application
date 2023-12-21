@@ -25,12 +25,12 @@ public class Administrator implements AccessLevel{
     //    private final CheckWorkersBehaviour checkWorkersBehaviour = new AdminCheckWorkers();
 
     @Override
-    public void sellBooks(Book book , int amount){
+    public void sellBooks(Book book , int amount) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book , amount);
     }
 
     @Override
-    public void sellBooks(Book book){
+    public void sellBooks(Book book) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book , 1);
     }
 
@@ -49,13 +49,18 @@ public class Administrator implements AccessLevel{
         return  addNewBooksBehaviour.addNewBooks(title, ISBN13, author, genre, publisher, price, isPaperback);
     }
 
-//    @Override
-//    public void checkWorker(Worker worker) {
-//        checkWorkersBehaviour.checkWorker(worker);
-//    }
+    @Override
+    public boolean fireWorker(ArrayList<Worker> listOfWorker, Worker worker) throws PermissionDeniedException {
+        return FIRE_WORKER_BEHAVIOUR.fireWorker(listOfWorker, worker);
+    }
 
     @Override
-    public void setSellBooksBehaviour(SellBooksBehaviour sellBooksBehaviour) {
+    public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) {
+        ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
+    }
+
+    @Override
+    public void setSellBookBehaviour(SellBooksBehaviour sellBooksBehaviour) {
         System.out.println("Administrator can't change sell books behaviour");
     }
 
@@ -69,23 +74,8 @@ public class Administrator implements AccessLevel{
         System.out.println("Administrator can't change add new books behaviour");
     }
 
-//    @Override
-//    public void setCheckWorkersBehaviour(CheckWorkersBehaviour checkWorkersBehaviour) {
-//        System.out.println("Administrator can't change check workers behaviour");
-//    }
-
     @Override
     public String getAccessLevel() {
         return "Administrator";
-    }
-
-    @Override
-    public boolean fireWorker(ArrayList<Worker> listOfWorker, Worker worker) throws PermissionDeniedException {
-        return FIRE_WORKER_BEHAVIOUR.fireWorker(listOfWorker, worker);
-    }
-
-    @Override
-    public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) {
-        ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
     }
 }

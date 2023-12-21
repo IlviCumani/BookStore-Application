@@ -16,7 +16,6 @@ public class Manager implements AccessLevel{
     private SellBooksBehaviour sellBooksBehaviour;
     private ResupplyStockBehaviour resupplyStockBehaviour;
     private AddNewBooksBehaviour addNewBooksBehaviour;
-
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
 
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
@@ -30,7 +29,8 @@ public class Manager implements AccessLevel{
 //        this.checkWorkersBehaviour = new ManagerCheckWorkers();
     }
 
-    public void setSellBooksBehaviour(SellBooksBehaviour sellBooksBehaviour) {
+    @Override
+    public void setSellBookBehaviour(SellBooksBehaviour sellBooksBehaviour) {
         this.sellBooksBehaviour = sellBooksBehaviour;
     }
 
@@ -42,12 +42,7 @@ public class Manager implements AccessLevel{
         this.addNewBooksBehaviour = addNewBooksBehaviour;
     }
 
-//    public void setCheckWorkersBehaviour(CheckWorkersBehaviour checkWorkersBehaviour)throws IllegalArgumentException{
-//        if(checkWorkersBehaviour instanceof AdminCheckWorkers){
-//            throw new IllegalArgumentException("Manager can't check Admins");
-//        }
-//        this.checkWorkersBehaviour = checkWorkersBehaviour;
-//    }
+
 
     @Override
     public String getAccessLevel() {
@@ -55,12 +50,12 @@ public class Manager implements AccessLevel{
     }
 
     @Override
-    public void sellBooks(Book book, int amount){
+    public void sellBooks(Book book, int amount) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book, amount);
     }
 
     @Override
-    public void sellBooks(Book book){
+    public void sellBooks(Book book) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book , 1);
     }
 

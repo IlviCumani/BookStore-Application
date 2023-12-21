@@ -16,18 +16,15 @@ public class Librarian implements AccessLevel{
     private SellBooksBehaviour sellBooksBehaviour;
     private final ResupplyStockBehaviour resupplyStockBehaviour = new NoPermissionToResupply();
     private final AddNewBooksBehaviour addNewBooksBehaviour = new NoPermissionToAddNewBooks();
-
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
-
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
 //    private final CheckWorkersBehaviour checkWorkersBehaviour = new NoPermissionToCheckWorkers();
-
 
     public Librarian(){
         sellBooksBehaviour = new PermissionToSellBooks();
     }
 
-    public void setSellBooksBehaviour(SellBooksBehaviour sellBooksBehaviour) {
+    public void setSellBookBehaviour(SellBooksBehaviour sellBooksBehaviour) {
         this.sellBooksBehaviour = sellBooksBehaviour;
     }
 
@@ -47,12 +44,12 @@ public class Librarian implements AccessLevel{
 //    }
 
     @Override
-    public void sellBooks(Book book , int amount){
+    public void sellBooks(Book book , int amount) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book, amount );
     }
 
     @Override
-    public void sellBooks(Book book){
+    public void sellBooks(Book book) throws PermissionDeniedException {
         sellBooksBehaviour.sellBooks(book , 1);
     }
 
