@@ -3,9 +3,11 @@ package StaffFolder.AccessLevels;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.PermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.PermissionToEditWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.PermissionToFireWorker;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.EditWorkerBehaviour;
 import StaffFolder.Worker;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.*;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.*;
@@ -22,7 +24,7 @@ public class Administrator implements AccessLevel{
 
     private final PermissionToAddNewWorker ADD_NEW_WORKER_BEHAVIOUR = new PermissionToAddNewWorker();
 
-    //    private final CheckWorkersBehaviour checkWorkersBehaviour = new AdminCheckWorkers();
+    private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new PermissionToEditWorker();
 
     @Override
     public void sellBooks(Book book , int amount) throws PermissionDeniedException {
@@ -57,6 +59,11 @@ public class Administrator implements AccessLevel{
     @Override
     public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) {
         ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
+    }
+
+    @Override
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
+        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel);
     }
 
     @Override

@@ -170,8 +170,54 @@ public class TestWorker {
         });
     }
 
+    @Test
+    public void test_adminEditsWorker() throws PermissionDeniedException {
+        admin.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+        assertAll("Check if the worker was edited",
+                () -> assertEquals("New Name", librarian.getFullname()),
+                () -> assertTrue(librarian.getAccessLevel() instanceof  Manager)
+        );
+    }
 
+    @Test
+    public void test_managerEditsWorker() {
+        assertThrows(PermissionDeniedException.class, () -> {
+            manager.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+        });
+    }
 
+    @Test
+    public void test_librarianPromotedToManagerResupplyBooks() throws PermissionDeniedException {
+        admin.getAccessLevel().editWorker(librarian, librarian.getFullname(), librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+        librarian.getAccessLevel().resupplyStock(bookList.get(0), 30);
+        assertEquals(130, bookList.get(0).getNrBookInStock());
+    }
 
+    @Test
+    public void test_adminEditsAnotherAdminWorker() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            admin.getAccessLevel().editWorker(admin, admin.getFullname(), admin.getEmail(), admin.getPhone(), admin.getSalary(), admin.getAccessLevel());
+        });
+    }
 
+    @Test
+    public void test_adminEditsWorkerWithInvalidSalary() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            admin.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), -100, new Manager());
+        });
+    }
+
+    @Test
+    public void test_adminDemotesManagerToLibrarian() throws PermissionDeniedException {
+        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(), manager.getPhone(), manager.getSalary(), new Librarian());
+        assertTrue(manager.getAccessLevel() instanceof Librarian);
+    }
+
+    @Test
+    public void test_adminDemotesManagerToLibrarianResupplyBooks() throws PermissionDeniedException {
+        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(), manager.getPhone(), manager.getSalary(), new Librarian());
+        assertThrows(IllegalStateException.class, () -> {
+            manager.getAccessLevel().resupplyStock(bookList.get(0), 30);
+        });
+    }
 }

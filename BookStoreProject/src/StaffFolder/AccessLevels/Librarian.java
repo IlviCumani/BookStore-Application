@@ -3,6 +3,8 @@ package StaffFolder.AccessLevels;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.NoPermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.EditWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.NoPermissionToEditWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.NoPermissionToFireWorker;
@@ -18,7 +20,8 @@ public class Librarian implements AccessLevel{
     private final AddNewBooksBehaviour addNewBooksBehaviour = new NoPermissionToAddNewBooks();
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
-//    private final CheckWorkersBehaviour checkWorkersBehaviour = new NoPermissionToCheckWorkers();
+    private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new NoPermissionToEditWorker();
+
 
     public Librarian(){
         sellBooksBehaviour = new PermissionToSellBooks();
@@ -37,11 +40,6 @@ public class Librarian implements AccessLevel{
     public void setAddNewBooksBehaviour(AddNewBooksBehaviour addNewBooksBehaviour) {
         System.out.println("Librarian can't change add new books behaviour");
     }
-
-//    @Override
-//    public void setCheckWorkersBehaviour(CheckWorkersBehaviour checkWorkersBehaviour) {
-//        System.out.println("Librarian can't change check workers behaviour");
-//    }
 
     @Override
     public void sellBooks(Book book , int amount) throws PermissionDeniedException {
@@ -68,11 +66,6 @@ public class Librarian implements AccessLevel{
         return addNewBooksBehaviour.addNewBooks(title, ISBN13, author, genre, publisher, price, isPaperback);
     }
 
-//    @Override
-//    public void checkWorker(Worker worker) {
-//        checkWorkersBehaviour.checkWorker(worker);
-//    }
-
     @Override
     public String getAccessLevel() {
         return "Librarian";
@@ -86,5 +79,10 @@ public class Librarian implements AccessLevel{
     @Override
     public void addNewWorker(ArrayList<Worker> listOfWorkers, Worker worker) throws PermissionDeniedException {
         ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
+    }
+
+    @Override
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
+        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel);
     }
 }

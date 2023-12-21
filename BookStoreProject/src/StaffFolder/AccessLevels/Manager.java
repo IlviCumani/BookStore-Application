@@ -2,6 +2,8 @@ package StaffFolder.AccessLevels;
 
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.NoPermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.EditWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.EditWorker.NoPermissionToEditWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.NoPermissionToFireWorker;
@@ -17,16 +19,13 @@ public class Manager implements AccessLevel{
     private ResupplyStockBehaviour resupplyStockBehaviour;
     private AddNewBooksBehaviour addNewBooksBehaviour;
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
-
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
-
-//    private CheckWorkersBehaviour checkWorkersBehaviour;
+    private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new NoPermissionToEditWorker();
 
     public Manager(){
         this.sellBooksBehaviour = new PermissionToSellBooks();
         this.resupplyStockBehaviour = new PermissionToResupply();
         this.addNewBooksBehaviour = new PermissionToAddNewBook();
-//        this.checkWorkersBehaviour = new ManagerCheckWorkers();
     }
 
     @Override
@@ -84,13 +83,8 @@ public class Manager implements AccessLevel{
         ADD_NEW_WORKER_BEHAVIOUR.addNewWorker(listOfWorkers, worker);
     }
 
-//    @Override
-//    public void checkWorker(Worker worker) {
-//        if(worker.getAccessLevel() instanceof Librarian){
-//            checkWorkersBehaviour.checkWorker(worker);
-//        }
-//        else{
-//            throw new IllegalArgumentException("Manager can't check Admins or other managers");
-//        }
-//    }
+    @Override
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
+        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel);
+    }
 }
