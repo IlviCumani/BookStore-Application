@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -172,9 +173,13 @@ public class TestWorker {
 
     @Test
     public void test_adminEditsWorker() throws PermissionDeniedException {
-        admin.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+        admin.getAccessLevel().editWorker(librarian, "New Name", "New Email",
+                                                "New Phone", 1000, new Manager());
         assertAll("Check if the worker was edited",
                 () -> assertEquals("New Name", librarian.getFullname()),
+                () -> assertEquals("New Email", librarian.getEmail()),
+                () -> assertEquals("New Phone", librarian.getPhone()),
+                () -> assertEquals(1000, librarian.getSalary()),
                 () -> assertTrue(librarian.getAccessLevel() instanceof  Manager)
         );
     }
@@ -182,13 +187,15 @@ public class TestWorker {
     @Test
     public void test_managerEditsWorker() {
         assertThrows(PermissionDeniedException.class, () -> {
-            manager.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+            manager.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(),
+                    librarian.getPhone(), librarian.getSalary(), new Manager());
         });
     }
 
     @Test
     public void test_librarianPromotedToManagerResupplyBooks() throws PermissionDeniedException {
-        admin.getAccessLevel().editWorker(librarian, librarian.getFullname(), librarian.getEmail(), librarian.getPhone(), librarian.getSalary(), new Manager());
+        admin.getAccessLevel().editWorker(librarian, librarian.getFullname(), librarian.getEmail(),
+                        librarian.getPhone(), librarian.getSalary(), new Manager());
         librarian.getAccessLevel().resupplyStock(bookList.get(0), 30);
         assertEquals(130, bookList.get(0).getNrBookInStock());
     }
@@ -196,28 +203,54 @@ public class TestWorker {
     @Test
     public void test_adminEditsAnotherAdminWorker() {
         assertThrows(IllegalArgumentException.class, () -> {
-            admin.getAccessLevel().editWorker(admin, admin.getFullname(), admin.getEmail(), admin.getPhone(), admin.getSalary(), admin.getAccessLevel());
+            admin.getAccessLevel().editWorker(admin, admin.getFullname(), admin.getEmail(), admin.getPhone(),
+                    admin.getSalary(), admin.getAccessLevel());
         });
     }
 
     @Test
     public void test_adminEditsWorkerWithInvalidSalary() {
         assertThrows(IllegalArgumentException.class, () -> {
-            admin.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(), librarian.getPhone(), -100, new Manager());
+            admin.getAccessLevel().editWorker(librarian, "New Name", librarian.getEmail(),
+                    librarian.getPhone(), -100, new Manager());
         });
     }
 
     @Test
     public void test_adminDemotesManagerToLibrarian() throws PermissionDeniedException {
-        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(), manager.getPhone(), manager.getSalary(), new Librarian());
+        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(),
+                                        manager.getPhone(), manager.getSalary(), new Librarian());
         assertTrue(manager.getAccessLevel() instanceof Librarian);
     }
 
     @Test
     public void test_adminDemotesManagerToLibrarianResupplyBooks() throws PermissionDeniedException {
-        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(), manager.getPhone(), manager.getSalary(), new Librarian());
+        admin.getAccessLevel().editWorker(manager, manager.getFullname(), manager.getEmail(), manager.getPhone()
+                                        , manager.getSalary(), new Librarian());
         assertThrows(IllegalStateException.class, () -> {
             manager.getAccessLevel().resupplyStock(bookList.get(0), 30);
         });
+    }
+
+    @Test
+    public void test_get100PercentLineCoverageInWorkerClass(){
+        Worker worker = new Worker();
+        worker.setFullname("New Name");
+        worker.setEmail("New Email");
+        worker.setPhone("New Phone");
+        worker.setPassword("New Password");
+        worker.setSalary(1000);
+        worker.setDateOfBirth(new Date());
+        worker.setAccessLevel(new Manager());
+        assertAll("Check if the worker was edited",
+                () -> assertEquals("New Name", worker.getFullname()),
+                () -> assertEquals("New Email", worker.getEmail()),
+                () -> assertEquals("New Password", worker.getPassword()),
+                () -> assertEquals("New Phone", worker.getPhone()),
+                () -> assertEquals(1000, worker.getSalary()),
+                () -> assertTrue(worker.getAccessLevel() instanceof  Manager),
+                () -> assertNotNull(worker.getDateOfBirth()),
+                () -> assertNotNull(worker.toString())
+        );
     }
 }
