@@ -1,6 +1,7 @@
 import IO.FileIO;
 import IO.FileIOServiceInjectable;
 import IO.MockFileIOService;
+import IO.WorkerFIleIOService;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
@@ -8,6 +9,7 @@ import StaffFolder.Worker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,27 @@ public class TestFile {
         fileIO.write(listOfWorkers);
         Worker dummy_Worker = new Worker();
         listOfWorkers.add(dummy_Worker);
+        fileIO.write(listOfWorkers);
+        assertEquals(listOfWorkers, fileIO.read());
+    }
+
+    @Test
+    void test_getFileIOService() {
+        FileIO fileIO = new FileIO(fileIoService);
+        assertEquals(fileIoService, fileIO.getFileService());
+    }
+
+    @Test
+    void test_setFileIOService() {
+        FileIO fileIO = new FileIO();
+        fileIO.setFileService(fileIoService);
+        assertEquals(fileIoService, fileIO.getFileService());
+    }
+
+    @Test
+    void test_writeInATempFile() {
+        WorkerFIleIOService fIleIOService = new WorkerFIleIOService();
+        FileIO fileIO = new FileIO(fIleIOService);
         fileIO.write(listOfWorkers);
         assertEquals(listOfWorkers, fileIO.read());
     }
