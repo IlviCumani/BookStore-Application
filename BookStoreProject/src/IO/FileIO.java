@@ -12,6 +12,10 @@ public class FileIO {
         this.fileService = fileService;
     }
 
+    public FileIO() {
+
+    }
+
     public void write(ArrayList<Serializable> listOFSomething) {
         this.fileService.write(listOFSomething);
     }
