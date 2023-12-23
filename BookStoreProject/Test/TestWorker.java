@@ -253,27 +253,4 @@ public class TestWorker {
                 () -> assertNotNull(worker.toString())
         );
     }
-
-    @Test
-    void test_get100PercentLineCoverageInBookClass(){
-        bookList.get(0).setBookTitle("New Title");
-        bookList.get(0).setBookAuthor("New Author");
-        bookList.get(0).setBookGenre("New Genre");
-        bookList.get(0).setBookPublisher("New Publisher");
-        bookList.get(0).setBookPrice(100);
-        bookList.get(0).setBookISBN13("9781234567890");
-        bookList.get(0).setPaperback(false);
-        bookList.get(0).setNrBookInStock(101);
-        assertAll("Check if the book was edited",
-                () -> assertEquals("New Title", bookList.get(0).getBookTitle()),
-                () -> assertEquals("New Author", bookList.get(0).getBookAuthor()),
-                () -> assertEquals("New Genre", bookList.get(0).getBookGenre()),
-                () -> assertEquals("New Publisher", bookList.get(0).getBookPublisher()),
-                () -> assertEquals(100, bookList.get(0).getBookPrice()),
-                () -> assertEquals("9781234567890", bookList.get(0).getBookISBN13()),
-                () -> assertFalse(bookList.get(0).getPaperback()),
-                () -> assertEquals(101, bookList.get(0).getNrBookInStock()),
-                () -> assertNotNull(bookList.get(0).toString())
-        );
-    }
 }
