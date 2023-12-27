@@ -6,9 +6,10 @@ import StaffFolder.Worker;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.*;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public interface AccessLevel {
+public interface AccessLevel extends Serializable {
     public String getAccessLevel();
     public void sellBooks(Book book) throws PermissionDeniedException;
     public void sellBooks(Book book , int amount) throws PermissionDeniedException;

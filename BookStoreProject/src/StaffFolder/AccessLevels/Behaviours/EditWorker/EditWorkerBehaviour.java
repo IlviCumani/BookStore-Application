@@ -4,6 +4,8 @@ import StaffFolder.AccessLevels.AccessLevel;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.Worker;
 
-public interface EditWorkerBehaviour {
+import java.io.Serializable;
+
+public interface EditWorkerBehaviour extends Serializable {
     public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel)throws PermissionDeniedException;
 }
