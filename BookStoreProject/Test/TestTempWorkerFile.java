@@ -1,6 +1,5 @@
 import IO.FileIO;
-import IO.FileIOServiceInjectable;
-import IO.MockFileIOService;
+import IO.WorkerFIleIOService;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
@@ -14,10 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class TestTempWorkerFile {
 
-public class TestFile {
 
-    private FileIOServiceInjectable fileIoService;
     private ArrayList<Serializable> listOfWorkers;
 
     @BeforeEach
@@ -28,38 +26,41 @@ public class TestFile {
         listOfWorkers = new ArrayList<>();
         Worker[] workers = {librarian, manager, admin};
         listOfWorkers.addAll(List.of(workers));
-        fileIoService = new MockFileIOService();
+
     }
 
     @Test
-    void test_verifyTheFileWrite() {
-        FileIO fileIO = new FileIO(fileIoService);
+    void test_writeInATempFile() {
+        WorkerFIleIOService fIleIOService = new WorkerFIleIOService();
+        FileIO fileIO = new FileIO(fIleIOService);
         fileIO.write(listOfWorkers);
         assertEquals(listOfWorkers, fileIO.read());
     }
 
     @Test
-    void test_writeWithoutDuplicates() {
-        FileIO fileIO = new FileIO(fileIoService);
+    void test_rewriteInATempFileAfterAddingAWorker() {
+        WorkerFIleIOService fIleIOService = new WorkerFIleIOService();
+        FileIO fileIO = new FileIO(fIleIOService);
         fileIO.write(listOfWorkers);
-        Worker dummy_Worker = new Worker();
-        listOfWorkers.add(dummy_Worker);
+        Worker dummyWorker = new Worker();
+        listOfWorkers.add(dummyWorker);
         fileIO.write(listOfWorkers);
         assertEquals(listOfWorkers, fileIO.read());
     }
 
     @Test
-    void test_getFileIOService() {
-        FileIO fileIO = new FileIO(fileIoService);
-        assertEquals(fileIoService, fileIO.getFileService());
+    void test_rewriteInATempFileAfterRemovingAWorker() {
+        WorkerFIleIOService fileIOService = new WorkerFIleIOService();
+        FileIO fileIO = new FileIO(fileIOService);
+        Worker dummy_worker = new Worker();
+        listOfWorkers.add(dummy_worker);
+        fileIO.write(listOfWorkers);
+        listOfWorkers.remove(dummy_worker);
+        fileIO.write(listOfWorkers);
+        assertEquals(listOfWorkers, (ArrayList<Serializable>)fileIO.read());
     }
 
-    @Test
-    void test_setFileIOService() {
-        FileIO fileIO = new FileIO();
-        fileIO.setFileService(fileIoService);
-        assertEquals(fileIoService, fileIO.getFileService());
-    }
+
 
 
 }

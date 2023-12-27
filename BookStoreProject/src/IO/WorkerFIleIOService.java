@@ -19,14 +19,14 @@ public class WorkerFIleIOService implements FileIOServiceInjectable{
         try {
             FileInputStream fout = new FileInputStream(file);
             ObjectInputStream reader = new ObjectInputStream(fout);
-            ArrayList<Serializable> list = (ArrayList<Serializable>)(reader.readObject());
-            return list;
+            Object o= reader.readObject();
+            reader.close();
+            if (o instanceof ArrayList<?>)
+                return (ArrayList<Serializable>)o;
+            throw new ClassNotFoundException();
         }
-        catch (IOException e) {
-            throw new IllegalStateException("Not allowed");
-        }
-        catch (ClassNotFoundException j) {
-            throw new IllegalStateException("Not allowedd");
+        catch (IOException | ClassNotFoundException j) {
+            throw new RuntimeException("Not allowed");
         }
 
     }
@@ -43,7 +43,8 @@ public class WorkerFIleIOService implements FileIOServiceInjectable{
             writer.close();
         }
         catch (IOException e) {
-            throw new IllegalStateException("Not ALlowed");
+            System.out.println(e.toString());
+            throw new RuntimeException();
         }
 
     }

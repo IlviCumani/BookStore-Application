@@ -1,8 +1,9 @@
 package StaffFolder;
 
+import StaffFolder.AccessLevels.AccessLevel;
+
 import java.io.Serializable;
 import java.util.Date;
-import StaffFolder.AccessLevels.*;
 
 public class Worker implements Serializable {
     private String fullname;
@@ -81,7 +82,7 @@ public class Worker implements Serializable {
     }
 
     public String getAccessLevelName() {
-        return this.accessLevel.getAccessLevel();
+        return this.accessLevel == null ? null : this.accessLevel.getAccessLevel();
     }
 
     public void setSalary(double salary) {
@@ -99,6 +100,20 @@ public class Worker implements Serializable {
                 ", accessLevel=" + getAccessLevelName() +
                 ", salary=" + salary +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Worker))
+            return false;
+
+        return (this.fullname == null ? ((Worker)o).getFullname() == null : this.fullname.equals(((Worker)o).getFullname())) &&
+                (this.email == null ? ((Worker)o).getEmail() == null : this.email.equals(((Worker)o).getEmail())) &&
+                (this.phone == null ? ((Worker)o).getPhone() == null : this.phone.equals(((Worker)o).getPhone())) &&
+                (this.password == null ? ((Worker)o).getPassword() == null : this.password.equals(((Worker)o).getPassword())) &&
+                (this.dateOfBirth == null ? ((Worker)o).getDateOfBirth() == null : this.dateOfBirth.equals(((Worker)o).getDateOfBirth())) &&
+                (this.getAccessLevelName() == null ? ((Worker)o).getAccessLevelName() == null : this.getAccessLevelName().equals(((Worker)o).getAccessLevelName())) &&
+                (this.salary == ((Worker)o).getSalary());
     }
 
 }
