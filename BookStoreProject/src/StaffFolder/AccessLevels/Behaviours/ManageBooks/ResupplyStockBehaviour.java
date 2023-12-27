@@ -2,6 +2,8 @@ package StaffFolder.AccessLevels.Behaviours.ManageBooks;
 
 import BookstoreData.Book;
 
-public interface ResupplyStockBehaviour {
+import java.io.Serializable;
+
+public interface ResupplyStockBehaviour extends Serializable {
     public void resupplyStock(Book book, int amount);
 }

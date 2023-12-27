@@ -1,12 +1,9 @@
 package BookstoreData;
 
-import javafx.beans.property.SimpleStringProperty;
-
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public class Book implements  Serializable{
+public class Book implements Serializable{
 
 	@Serial
 	private static final long serialVersionUID = 5296705482940410483L;
@@ -28,6 +25,10 @@ public class Book implements  Serializable{
 		this.nrBookInStock = 100;
 		this.bookPrice = bookPrice;
 		this.paperback = paperback;
+	}
+
+	public Book() {
+
 	}
 
 	public String getBookTitle() {
@@ -101,6 +102,20 @@ public class Book implements  Serializable{
 				", nrBookInStock=" + nrBookInStock +
 				", bookPrice=" + bookPrice +
 				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Book))
+			return false;
+        return (
+				(this.bookTitle == null ? ((Book) o).getBookTitle() == null : this.bookTitle.equals(((Book) o).getBookTitle())) &&
+				(this.bookAuthor == null ? ((Book) o).getBookAuthor() == null : this.bookAuthor.equals(((Book) o).getBookAuthor())) &&
+				(this.bookGenre == null ? ((Book) o).getBookGenre() == null : this.bookGenre.equals(((Book) o).getBookGenre()))	 &&
+				(this.bookPublisher == null ? ((Book) o).getBookPublisher() == null : this.bookPublisher.equals(((Book) o).getBookPublisher())) &&
+				(this.nrBookInStock == ((Book) o).getNrBookInStock()) &&
+				(this.bookPrice == ((Book) o).bookPrice)
+				);
 	}
 }
 
