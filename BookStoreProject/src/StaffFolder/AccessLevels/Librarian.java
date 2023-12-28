@@ -3,6 +3,8 @@ package StaffFolder.AccessLevels;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.NoPermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.CheckWorkers.CheckWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.CheckWorkers.NoPermissionToCheckWorker;
 import StaffFolder.AccessLevels.Behaviours.EditWorker.EditWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.EditWorker.NoPermissionToEditWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
@@ -18,6 +20,7 @@ public class Librarian implements AccessLevel{
     private SellBooksBehaviour sellBooksBehaviour;
     private final ResupplyStockBehaviour resupplyStockBehaviour = new NoPermissionToResupply();
     private final AddNewBooksBehaviour addNewBooksBehaviour = new NoPermissionToAddNewBooks();
+    private final CheckWorkerBehaviour CHECK_WORKER_BEHAVIOUR = new NoPermissionToCheckWorker();
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new NoPermissionToFireWorker();
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
     private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new NoPermissionToEditWorker();
@@ -39,6 +42,11 @@ public class Librarian implements AccessLevel{
     @Override
     public void setAddNewBooksBehaviour(AddNewBooksBehaviour addNewBooksBehaviour) {
         System.out.println("Librarian can't change add new books behaviour");
+    }
+
+    @Override
+    public void setCheckWorkerBehaviour(CheckWorkerBehaviour checkWorkerBehaviour) {
+        System.out.println("Librarian can't change check worker behaviour");
     }
 
     @Override
@@ -82,7 +90,43 @@ public class Librarian implements AccessLevel{
     }
 
     @Override
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
-        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel);
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour) throws PermissionDeniedException {
+        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel, sellBooksBehaviour, resupplyStockBehaviour, addNewBooksBehaviour, checkWorkerBehaviour);
     }
+
+    @Override
+    public SellBooksBehaviour getSellBooksBehaviour() {
+        return sellBooksBehaviour;
+    }
+
+    @Override
+    public ResupplyStockBehaviour getResupplyStockBehaviour() {
+        return resupplyStockBehaviour;
+    }
+
+    @Override
+    public AddNewBooksBehaviour getAddNewBooksBehaviour() {
+        return addNewBooksBehaviour;
+    }
+
+    @Override
+    public FireWorkerBehaviour getFireWorkerBehaviour() {
+        return FIRE_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public AddNewWorkerBehaviour getAddNewWorkerBehaviour() {
+        return ADD_NEW_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public EditWorkerBehaviour getEditWorkerBehaviour() {
+        return EDIT_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public CheckWorkerBehaviour getCheckWorkerBehaviour() {
+        return CHECK_WORKER_BEHAVIOUR;
+    }
+
 }

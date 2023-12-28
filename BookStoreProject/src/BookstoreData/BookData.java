@@ -3,7 +3,7 @@ package BookstoreData;
 //import BookstoreData.Book.Genre;
 import Orders.BuyOrders;
 import Orders.PurchaseOrders;
-import Staff.Worker;
+import StaffFolder.Worker;
 import Style.MainPage;
 import Style.SettingStyles;
 import javafx.geometry.Insets;
@@ -160,7 +160,7 @@ public class BookData implements Serializable {
 
 				boolean res = writeBookToFile(newBook);
 				books.add(newBook);
-				primaryStage.setScene(new Scene(new MainPage(primaryStage, temp).getRoot()));
+//				primaryStage.setScene(new Scene(new MainPage(primaryStage, temp, ).getRoot()));
         		primaryStage.setFullScreen(true);
 				stage.close();
 			}

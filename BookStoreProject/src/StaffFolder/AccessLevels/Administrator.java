@@ -3,6 +3,8 @@ package StaffFolder.AccessLevels;
 import BookstoreData.Book;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.AddNewWorkerBehaviour;
 import StaffFolder.AccessLevels.Behaviours.AddNewWorker.PermissionToAddNewWorker;
+import StaffFolder.AccessLevels.Behaviours.CheckWorkers.CheckWorkerBehaviour;
+import StaffFolder.AccessLevels.Behaviours.CheckWorkers.PermissionToCheckWorker;
 import StaffFolder.AccessLevels.Behaviours.EditWorker.PermissionToEditWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.FireWorker.FireWorkerBehaviour;
@@ -19,11 +21,9 @@ public class Administrator implements AccessLevel{
     private final SellBooksBehaviour sellBooksBehaviour = new PermissionToSellBooks();
     private final ResupplyStockBehaviour resupplyStockBehaviour = new PermissionToResupply();
     private final AddNewBooksBehaviour addNewBooksBehaviour = new PermissionToAddNewBook();
-
+    private final CheckWorkerBehaviour CHECK_WORKER_BEHAVIOUR = new PermissionToCheckWorker();
     private final FireWorkerBehaviour FIRE_WORKER_BEHAVIOUR = new PermissionToFireWorker();
-
     private final PermissionToAddNewWorker ADD_NEW_WORKER_BEHAVIOUR = new PermissionToAddNewWorker();
-
     private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new PermissionToEditWorker();
 
     @Override
@@ -62,8 +62,8 @@ public class Administrator implements AccessLevel{
     }
 
     @Override
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
-        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel);
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour) throws PermissionDeniedException {
+        EDIT_WORKER_BEHAVIOUR.editWorker(worker, fullName, email, phoneNumber, salary, accessLevel, sellBooksBehaviour, resupplyStockBehaviour, addNewBooksBehaviour, checkWorkerBehaviour);
     }
 
     @Override
@@ -82,7 +82,47 @@ public class Administrator implements AccessLevel{
     }
 
     @Override
+    public void setCheckWorkerBehaviour(CheckWorkerBehaviour checkWorkerBehaviour) {
+        System.out.println("Administrator can't change check worker behaviour");
+    }
+
+    @Override
     public String getAccessLevel() {
         return "Administrator";
+    }
+
+    @Override
+    public SellBooksBehaviour getSellBooksBehaviour() {
+        return sellBooksBehaviour;
+    }
+
+    @Override
+    public ResupplyStockBehaviour getResupplyStockBehaviour() {
+        return resupplyStockBehaviour;
+    }
+
+    @Override
+    public AddNewBooksBehaviour getAddNewBooksBehaviour() {
+        return addNewBooksBehaviour;
+    }
+
+    @Override
+    public FireWorkerBehaviour getFireWorkerBehaviour() {
+        return FIRE_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public AddNewWorkerBehaviour getAddNewWorkerBehaviour() {
+        return ADD_NEW_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public EditWorkerBehaviour getEditWorkerBehaviour() {
+        return EDIT_WORKER_BEHAVIOUR;
+    }
+
+    @Override
+    public CheckWorkerBehaviour getCheckWorkerBehaviour() {
+        return CHECK_WORKER_BEHAVIOUR;
     }
 }
