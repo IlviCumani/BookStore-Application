@@ -20,7 +20,7 @@ public class LoginController{
     private static final Label WRONG_EMAIL = new Label("Email Doesn't Exist");
     SettingStyles styles = new SettingStyles();
 
-    private static final FileIO fileIO = new FileIO(null);
+    private static final FileIO fileIO = new FileIO(new WorkerFileIOService());
 
     public static void login(String email, String password, Stage primaryStage, GridPane center){
         ArrayList<Serializable> listOfWorkersSerial = fileIO.read();

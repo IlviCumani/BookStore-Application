@@ -1,27 +1,17 @@
 package StyleControllers;
 
 import java.util.ArrayList;
-
 import BookstoreData.*;
-import Orders.BuyOrders;
-import Staff.*;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
+import StaffFolder.AccessLevels.Manager;
 import Style.*;
+import StaffFolder.Worker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -33,27 +23,30 @@ public class MainController {
     private static SettingStyles styles = new SettingStyles();
     
     //LogOut
-    public static void LogOut(Stage primaryStage){
-        primaryStage.setMinHeight(600);
-        primaryStage.setMinWidth(800);
-        primaryStage.setScene(new Scene(new LoginPage(primaryStage).getRoot(), 800, 600));
-    }
+//    public static void LogOut(Stage primaryStage){
+//        primaryStage.setMinHeight(600);
+//        primaryStage.setMinWidth(800);
+//        primaryStage.setScene(new Scene(new LoginPage(primaryStage).getRoot(), 800, 600));
+//    }
 
     //Add Worker
-    public static void addWorker(WorkerData workers, Stage primaryStage, Worker worker){
-        workers.newWorkerForm(primaryStage, worker);
+    public static void addWorker(ArrayList<Worker> listOfWorkers, Stage primaryStage, Worker worker) throws PermissionDeniedException {
+        Worker newWorker = new WorkerForm().newWorkerForm(primaryStage);
+        worker.getAccessLevel().addNewWorker(listOfWorkers, newWorker);
     }
 
     //Add Book
-    public static void addBook(BookData books, Stage primaryStage, Worker worker){
-        books.newBookForm(primaryStage, worker);
-    }
+//    public static void addBook(ArrayList<Book> listOfBooks, Stage primaryStage, Worker worker, ArrayList<Worker> listOfWorkers){
+//        BookForm bookForm = new BookForm();
+//        bookForm.newBookForm(primaryStage, worker, listOfBooks, listOfWorkers);
+//
+//    }
 
     //Book Table
-    public static TableView<Book> bookTable(BookData books, Stage primaryStage, String... args){
+    public static TableView<Book> bookTable(ArrayList<Book> listOfBooks, Stage primaryStage, String... args){
         TableView Table = new TableView();
 
-        ObservableList<Book> data = FXCollections.observableArrayList(books.getBooks());
+        ObservableList<Book> data = FXCollections.observableArrayList(listOfBooks);
         Table.setItems(data);
 
         for(int i = 0; i < args.length; i++) {
@@ -69,16 +62,25 @@ public class MainController {
     }
 
     //Worker Table
-    public static TableView<Worker> workerTable(WorkerData workers,Worker worker, Stage primaryStage, String... args){
+    public static TableView<Worker> workerTable(ArrayList<Worker> listOfWorkers,Worker worker, Stage primaryStage, String... args){
 
-        TableView Table = new TableView();
+        TableView<Worker> Table = new TableView<>();
 
         ObservableList<Worker> data ;
-            if(worker.getACCESSLEVEL().toString().equals("MANAGER")){
-                data = FXCollections.observableArrayList(workers.getLibrarians());
+
+            if(worker.getAccessLevel() instanceof Manager){
+
+                ArrayList<Worker> librarians = new ArrayList<Worker>();
+                for(Worker temp : listOfWorkers){
+                    if(temp.getAccessLevel().getAccessLevel().equals("Librarian")){
+                        librarians.add(temp);
+                    }
+                }
+                data = FXCollections.observableArrayList(librarians);
             }
+
             else{
-                data = FXCollections.observableArrayList(workers.getData());
+                data = FXCollections.observableArrayList(listOfWorkers);
             }
 
             Table.setItems(data);
