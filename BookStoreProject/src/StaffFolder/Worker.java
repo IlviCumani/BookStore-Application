@@ -12,6 +12,7 @@ public class Worker implements Serializable {
     private String phone;
     private Date dateOfBirth;
     private AccessLevel accessLevel;
+    private String status;
     private double salary;
 
 
@@ -23,6 +24,7 @@ public class Worker implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.accessLevel = accessLevel;
         this.salary = salary;
+        status = getAccessLevelName();
     }
 
     public Worker() {
@@ -57,6 +59,10 @@ public class Worker implements Serializable {
         return salary;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
@@ -79,10 +85,15 @@ public class Worker implements Serializable {
 
     public void setAccessLevel(AccessLevel accessLevel) {
         this.accessLevel = accessLevel;
+        this.status = getAccessLevelName();
     }
 
     public String getAccessLevelName() {
         return this.accessLevel == null ? null : this.accessLevel.getAccessLevel();
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setSalary(double salary) {

@@ -173,7 +173,7 @@ public class MainPage{
         BookTab.setStyle(styles.getBookTableStyle());
         BookTab.setClosable(false);
         tabPane.getTabs().add(BookTab);
-        bookTableView = MainController.bookTable(listOfBooks, primaryStage, "Title", "Author", "Price", "Stock","Isbn13","Paperback");
+        bookTableView = MainController.bookTable(listOfBooks, primaryStage, "bookTitle", "bookAuthor", "bookPrice", "nrBookInStock", "bookISBN13", "Paperback", "bookPublisher", "bookGenre");
         
         HBox bookBottomPane = new HBox(20);
         bookBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
@@ -209,7 +209,7 @@ public class MainPage{
 
         tabPane.getTabs().add(EmployeeTab);
 
-        workerTableView = MainController.workerTable(listOfWorkers, worker, primaryStage, "FullName", "Email", "Phone", "Status","dateOfBirth", "salary");
+        workerTableView = MainController.workerTable(listOfWorkers, worker, primaryStage, "Fullname", "Email", "Phone", "Status","dateOfBirth", "salary");
 
         HBox workerBottomPane = new HBox(20);
         workerBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
@@ -476,53 +476,60 @@ public class MainPage{
         workerFullName.setStyle(styles.getSalesLabel());
         TextField newName = new TextField();
         newName.setStyle(styles.getLoginTextFieldStyle());
-        
-//!        Label totalSales= new Label("Sales : "+tempworker.getTotalPurchases());
-//!        totalSales.setStyle(styles.getSalesLabel());
-//!        Label totalBuys= new Label("Bought : "+tempworker.getTotalBuys());
-//!        totalBuys.setStyle(styles.getSalesLabel());
+
         workerEmail = new Label(tempworker.getEmail());
         workerEmail.setStyle(styles.getSalesLabel());
         TextField newEmail = new TextField();
         newEmail.setStyle(styles.getLoginTextFieldStyle());
                         
-        ChoiceBox<AccessLevel> newAccessLevel = new ChoiceBox<>();
-        newAccessLevel.getItems().addAll(new Librarian(), new Manager(), new Administrator());//! Check this out later
-        newAccessLevel.setStyle(styles.getSearchListStyle());
-        newAccessLevel.setValue(tempworker.getAccessLevel());
-        
-        CheckBox newPermitionToPurchaseCheckBox = new CheckBox("Permission to purchase");
-        
-        newPermitionToPurchaseCheckBox.setOnAction(e->{
-            if(newPermitionToPurchaseCheckBox.isSelected()){
-                permitionToPurchase = true;
-            } else {
-                permitionToPurchase = false;
+        ChoiceBox<String> newAccessLevelString = new ChoiceBox<>();
+        final AccessLevel[] newAccessLevel = {tempworker.getAccessLevel()};
+        newAccessLevelString.getItems().addAll("Librarian", "Manager", "Administrator");//! Check this out later
+        newAccessLevelString.setStyle(styles.getSearchListStyle());
+        newAccessLevelString.setValue(tempworker.getAccessLevelName());
+
+        newAccessLevelString.setOnKeyPressed(e-> {
+            if(KeyCode.ENTER == e.getCode()){
+                if(newAccessLevelString.getValue().equals("Librarian")){
+                    newAccessLevel[0] = new Librarian();
+                }else if(newAccessLevelString.getValue().equals("Manager")){
+                    newAccessLevel[0] = new Manager();
+                }else{
+                    newAccessLevel[0] = new Administrator();
+                }
             }
-            System.out.println(permitionToPurchase);
         });
         
-        CheckBox newPremitionToCheckLib = new CheckBox("Check Librarians");
+//        CheckBox newPermitionToPurchaseCheckBox = new CheckBox("Permission to purchase");
+//
+//        newPermitionToPurchaseCheckBox.setOnAction(e->{
+//            if(newPermitionToPurchaseCheckBox.isSelected()){
+//                permitionToPurchase = true;
+//            } else {
+//                permitionToPurchase = false;
+//            }
+//            System.out.println(permitionToPurchase);
+//        });
+//
+//        CheckBox newPremitionToCheckLib = new CheckBox("Check Librarians");
+//
+//        newPremitionToCheckLib.setOnAction(e->{
+//            if(newPremitionToCheckLib.isSelected()){
+//                permitionToCheckLib = true;
+//            } else {
+//                permitionToCheckLib = false;
+//            }
+//            System.out.println(permitionToCheckLib);
+//        });
+//
+//        CheckBox newPremitionToBill = new CheckBox("Permition to bill");
+//
+//        newPremitionToBill.setOnAction(e->{
+//            permitionToBill = newPremitionToBill.isSelected();
+//            System.out.println(permitionToBill);
+//        });
 
-        newPremitionToCheckLib.setOnAction(e->{
-            if(newPremitionToCheckLib.isSelected()){
-                permitionToCheckLib = true;
-            } else {
-                permitionToCheckLib = false;
-            }
-            System.out.println(permitionToCheckLib);
-        });
 
-        CheckBox newPremitionToBill = new CheckBox("Permition to bill");
-
-        newPremitionToBill.setOnAction(e->{
-            permitionToBill = newPremitionToBill.isSelected();
-            System.out.println(permitionToBill);
-        });
-
-        newAccessLevel.setOnKeyPressed(e->{
-            tempworker.setAccessLevel(newAccessLevel.getValue());
-        });
 
 
         workerSalary = new Label("" + tempworker.getSalary());
@@ -534,8 +541,6 @@ public class MainPage{
         workerPhoneNumber.setStyle(styles.getSalesLabel());
         TextField newPhoneNumber = new TextField();
         newPhoneNumber.setStyle(styles.getLoginTextFieldStyle());
-
-        
 
         Button deletWorkerBtn = new Button("Delete Worker");
         deletWorkerBtn.setStyle(styles.getLogOutBtnStyle());
@@ -560,8 +565,9 @@ public class MainPage{
         });
 
         editWorkerBtn.setOnAction(e -> {
+            System.out.println("Edit worker");
             try {
-                worker.getAccessLevel().editWorker(tempworker, newName.getText(), newEmail.getText(), newPhoneNumber.getText(), Double.parseDouble(newSalary.getText()), newAccessLevel.getValue(), tempworker.getAccessLevel().getSellBooksBehaviour(), tempworker.getAccessLevel().getResupplyStockBehaviour(), tempworker.getAccessLevel().getAddNewBooksBehaviour(), tempworker.getAccessLevel().getCheckWorkerBehaviour());
+                worker.getAccessLevel().editWorker(tempworker, workerFullName.getText(), workerEmail.getText(), workerPhoneNumber.getText(), Double.parseDouble(workerSalary.getText()), newAccessLevel[0], tempworker.getAccessLevel().getSellBooksBehaviour(), tempworker.getAccessLevel().getResupplyStockBehaviour(), tempworker.getAccessLevel().getAddNewBooksBehaviour(), tempworker.getAccessLevel().getCheckWorkerBehaviour());
             } catch (PermissionDeniedException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -613,7 +619,7 @@ public class MainPage{
 
         grid.add(workerFullName, 0, 0);
         grid.add(workerEmail, 0, 1);
-        grid.add(newAccessLevel, 0, 2);
+        grid.add(newAccessLevelString, 0, 2);
         grid.add(workerSalary, 0, 3);
         grid.add(workerPhoneNumber, 0, 4);
 //!        grid.add(totalSales, 0, 5);
