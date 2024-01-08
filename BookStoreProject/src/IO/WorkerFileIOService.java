@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class WorkerFileIOService implements FileIOServiceInjectable{
     private File file;
-    private final String PATH = "BookStoreProject/Files/WorkersData.dat";
+    private final String PATH = "BookStoreProject/src/Files/WorkersData.dat";
 
     public WorkerFileIOService() {
         this.file = new File(PATH);
