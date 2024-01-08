@@ -1,5 +1,5 @@
 import BookstoreData.Book;
-import IO.BookFileIOService;
+import IO.TEMPBookFileIOService;
 import IO.FileIO;
 import IO.FileIOServiceInjectable;
 import StaffFolder.AccessLevels.Administrator;
@@ -17,7 +17,7 @@ public class TestTempBookFile {
     private FileIOServiceInjectable fileIoService;
     private ArrayList<Serializable> listOfBooks;
     private Worker admin;
-     private BookFileIOService bookFileIOService;
+     private TEMPBookFileIOService bookFileIOService;
      private FileIO fileIO;
 
     @BeforeEach
@@ -29,7 +29,7 @@ public class TestTempBookFile {
         Book[] books = {book1, book2, book3};
         listOfBooks = new ArrayList<>();
         listOfBooks.addAll(List.of(books));
-        this.bookFileIOService = new BookFileIOService();
+        this.bookFileIOService = new TEMPBookFileIOService();
         this.fileIO = new FileIO(bookFileIOService);
     }
 

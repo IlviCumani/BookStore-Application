@@ -1,8 +1,9 @@
 package StyleControllers;
 
+import java.io.Serializable;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 
-import Staff.*;
 import Style.MainPage;
 import Style.SettingStyles;
 import javafx.scene.Scene;
@@ -10,51 +11,55 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import IO.*;
+import StaffFolder.*;
+
 public class LoginController{
 
-    private static Label wrongPassword;
-    private static Label wrongEmail;
+    private static final Label WRONG_PASSWORD = new Label("Wrong Password");;
+    private static final Label WRONG_EMAIL = new Label("Email Doesn't Exist");
+    SettingStyles styles = new SettingStyles();
+
+    private static final FileIO fileIO = new FileIO(new WorkerFileIOService());
 
     public static void login(String email, String password, Stage primaryStage, GridPane center){
+        ArrayList<Serializable> listOfWorkersSerial = fileIO.read();
 
-        WorkerData workerData = new WorkerData();
-        SettingStyles styles = new SettingStyles();
+        ArrayList<Worker> listOfWorkers = new ArrayList<>();
 
-        boolean emailExists=false;
-        Worker temp = workerData.getWorkerFromEmail(email);
-        center.getChildren().remove(wrongPassword);
-        center.getChildren().remove(wrongEmail);
-        if(temp!=null){
-            emailExists=true;
+        for(Serializable worker : listOfWorkersSerial){
+            listOfWorkers.add((Worker)worker);
         }
-        if(emailExists){
 
-        if(temp.getPassword().equals(password)){
-            Worker worker;
+        Worker worker = getWorkerFromEmail(email, listOfWorkers);
 
-            if(temp.getACCESSLEVEL().equals(Worker.ACCESSLEVEL.ADMIN)){
-                worker = new Admin(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getSalary(), temp.getDateOfBirth(), temp.getGender(),temp.getPassword(), temp.getACCESSLEVEL());
-            }else if(temp.getACCESSLEVEL().equals(Worker.ACCESSLEVEL.LIBRARIAN)){
-                worker = new Librarian(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getDateOfBirth(),  temp.getGender(),temp.getSalary(), temp.getPassword(), temp.getACCESSLEVEL(), ((Librarian) temp).isPermitionToBill());
-            }else{
-                worker = new Manager(temp.getFullName(), temp.getPhone(), temp.getEmail(), temp.getSalary(), temp.getDateOfBirth(), temp.getGender(), temp.getPassword(), temp.getACCESSLEVEL(), ((Manager) temp).isPermitionToPurchse(), ((Manager) temp).isCheckLibrarians());
-            }
-            Scene scene = new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600);
-            primaryStage.setScene(scene);
-            primaryStage.setFullScreen(true);
+        if(worker != null){
+            if(worker.getPassword().equals(password)){
+                Scene scene = new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600);
+                primaryStage.setScene(scene);
+                primaryStage.setFullScreen(true);
             }
             else {
-                wrongPassword = new Label("Wrong Password");
-                wrongPassword.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
-                center.add(wrongPassword, 0, 4);
+                WRONG_PASSWORD.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
+                center.add(WRONG_PASSWORD, 0, 4);
             }
-
-        }else{
-            wrongEmail = new Label("Email Doesn't Exist");
-            wrongEmail.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
-            center.add(wrongEmail, 0, 4);
         }
+        else{
+            WRONG_EMAIL.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
+            center.add(WRONG_EMAIL, 0, 4);
+        }
+    }
 
+    private static Worker getWorkerFromEmail(String email, ArrayList<Worker> listOfWorkers){
+        if(listOfWorkers == null){
+            return null;
+        }
+        for(Worker worker : listOfWorkers){
+            if(worker.getEmail().equals(email)){
+                return worker;
+            }
+        }
+        return null;
     }
             
 } 

@@ -2,20 +2,17 @@ package Style;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import BookstoreData.Book;
-import BookstoreData.BookData;
 import Orders.BillData;
-import Orders.BuyOrders;
 import Orders.PurchaseOrders;
-import Staff.Admin;
-import Staff.Gender;
-import Staff.Librarian;
-import Staff.Manager;
-import Staff.Worker;
-import Staff.WorkerData;
-import Staff.Worker.ACCESSLEVEL;
+import StaffFolder.AccessLevels.Behaviours.CheckWorkers.NoPermissionToCheckWorker;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
+import StaffFolder.AccessLevels.Behaviours.ManageBooks.NoPermissionToAddNewBooks;
+import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToAddNewBook;
+import StaffFolder.AccessLevels.Behaviours.SellBooks.NoPermissionToSellBooks;
 import StyleControllers.MainController;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -40,9 +37,17 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+//?TONART
+import StaffFolder.*;
+import StaffFolder.AccessLevels.*;
+
+import IO.*;
+
 public class MainPage{
 
-    private final BorderPane root;
+    private final ArrayList<Worker> listOfWorkers;
+    private final ArrayList<Book> listOfBooks = new ArrayList<Book>();
+    private final BorderPane root = new BorderPane();;
     private HBox top;
     private VBox PersonalInfo;
     private Stage primaryStage;
@@ -51,8 +56,6 @@ public class MainPage{
     private SettingStyles styles;
     private VBox center;
     private Worker worker;
-    private BookData books;
-    private WorkerData workers;
     private TableView<Book> bookTableView;
     private TableView<Worker> workerTableView;
     private BorderPane right;
@@ -75,32 +78,36 @@ public class MainPage{
     private BillData billData;
 
 
-    public MainPage(Stage primaryStage, Worker worker) {
+    public MainPage(Stage primaryStage, Worker worker, ArrayList<Worker> listOfWorkers) {
         System.out.println("We are in main page");
         this.primaryStage = primaryStage;
-        root = new BorderPane();
         this.worker=worker;
-        this.books = new BookData();
-        this.workers = new WorkerData();
+        this.listOfWorkers=listOfWorkers;
+        ArrayList<Serializable> books = new FileIO(new BookFileIOService()).read();
+        for (Serializable book : books) {
+            listOfBooks.add((Book) book);
+        }
+
         this.billData= new BillData();
 
-        if(!(worker instanceof Librarian)){
+        if(!(worker.getAccessLevel() instanceof Librarian)){
            int a=0;
            StringBuilder names= new StringBuilder("\n");
-        for (Book b : books.getBooks()) {
-            if(b.getNrBookInStock() < 5){
-                System.out.println(b.getNrBookInStock());
-                names.append(b.getBookTitle()).append("\n");
-                a++;
+            for (Book b : listOfBooks) {
+                if(b.getNrBookInStock() < 5){
+                    System.out.println(b.getNrBookInStock());
+                    names.append(b.getBookTitle()).append("\n");
+                    a++;
+                }
+            }
+            if(a!=0) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Low Stock");
+                alert.setHeaderText("Low Stock");
+                alert.setContentText("There are books with low stock"+names);
+                alert.showAndWait();
             }
         }
-    if(a!=0) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Low Stock");
-        alert.setHeaderText("Low Stock");
-        alert.setContentText("There are books with low stock"+names);
-        alert.showAndWait();
-    }}
         try {
             createMainPage();
         } catch (FileNotFoundException e) {
@@ -117,23 +124,18 @@ public class MainPage{
         
         //Left Pane
         PersonalInfo = new VBox(25);
-        Image profileImage;
-        if(worker.getGender().equals(Gender.FEMALE)){
-            profileImage = new Image(new FileInputStream("BookStoreProject/src/Images/woman.png"));
-        }else{
-            profileImage = new Image(new FileInputStream("BookStoreProject/src/Images/man.png"));
-        }
+        Image profileImage = new Image(new FileInputStream("BookStoreProject/src/Images/man.png"));
 
         Circle circle = new Circle(125, 125, 125);
         circle.setFill(new javafx.scene.paint.ImagePattern(profileImage));
 
-        Text name = new Text(worker.getFullName());
+        Text name = new Text(worker.getFullname());
         name.setStyle(styles.getMainPagePersonalInfoStyle());
         Text email = new Text(worker.getEmail());
         email.setStyle(styles.getMainPagePersonalInfoStyle());
         Text phone = new Text(worker.getPhone());
         phone.setStyle(styles.getMainPagePersonalInfoStyle());
-        Text status = new Text(worker.getACCESSLEVEL().toString());
+        Text status = new Text(worker.getAccessLevelName());
         status.setStyle(styles.getMainPagePersonalInfoStyle());
         
         PersonalInfo.getChildren().addAll(circle, name, email, phone, status);
@@ -171,7 +173,7 @@ public class MainPage{
         BookTab.setStyle(styles.getBookTableStyle());
         BookTab.setClosable(false);
         tabPane.getTabs().add(BookTab);
-        bookTableView = MainController.bookTable(books, primaryStage, "Title", "Author", "Price", "Stock","Isbn13","Paperback");
+        bookTableView = MainController.bookTable(listOfBooks, primaryStage, "Title", "Author", "Price", "Stock","Isbn13","Paperback");
         
         HBox bookBottomPane = new HBox(20);
         bookBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
@@ -181,7 +183,7 @@ public class MainPage{
         addBookToStockBtn = new Button("Add To Stock");
         addBookToStockBtn.setStyle(styles.getLogOutBtnStyle());
         
-        if(worker.getACCESSLEVEL().toString().equals("LIBRARIAN")) {
+        if(worker.getAccessLevel() instanceof Librarian) {
             addBookBtn.setDisable(true);
             addBookToStockBtn.setDisable(true);
         }
@@ -201,18 +203,13 @@ public class MainPage{
         EmployeeTab.setStyle(styles.getBookTableStyle());
         EmployeeTab.setClosable(false);
 
-        if(worker.getACCESSLEVEL().toString().equals("LIBRARIAN")){
+        if(worker.getAccessLevel().getCheckWorkerBehaviour() instanceof NoPermissionToCheckWorker){
             EmployeeTab.setDisable(true);
         }
-        if(worker instanceof Manager){
-            boolean isPromited = ((Manager) worker).isCheckLibrarians();
-            if(!isPromited){
-                EmployeeTab.setDisable(true);
-            }
-        }
+
         tabPane.getTabs().add(EmployeeTab);
 
-        workerTableView = MainController.workerTable(workers, worker, primaryStage, "FullName", "Email", "Phone", "Status","dateOfBirth", "salary");
+        workerTableView = MainController.workerTable(listOfWorkers, worker, primaryStage, "FullName", "Email", "Phone", "Status","dateOfBirth", "salary");
 
         HBox workerBottomPane = new HBox(20);
         workerBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
@@ -220,8 +217,8 @@ public class MainPage{
 
         addWorkerBtn = new Button("Add Worker");
 
-        if(!worker.getACCESSLEVEL().toString().equals("ADMIN")){
-                    addWorkerBtn.setDisable(true);
+        if(!(worker.getAccessLevel() instanceof Administrator)){
+            addWorkerBtn.setDisable(true);
         }
 
         addWorkerBtn.setStyle(styles.getLogOutBtnStyle());
@@ -250,7 +247,7 @@ public class MainPage{
                 System.out.println(content);
                 if(choice.equals("Title")){
                     System.out.println("hyri");
-                    Book book = books.searchByTitle(content);
+                    Book book = listOfBooks.get(listOfBooks.indexOf(new Book(content, "", "", "", "", 0, false)));
                     System.out.println("U gjet libri" + book.getBookTitle());
                     BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
                 }else if(choice.equals("Author")){
@@ -262,11 +259,24 @@ public class MainPage{
             }
         });
 
-        LogOutBtn.setOnAction(e -> MainController.LogOut(primaryStage));
+        LogOutBtn.setOnAction(e -> {
+            primaryStage.setMinHeight(600);
+            primaryStage.setMinWidth(800);
+            primaryStage.setScene(new Scene(new LoginPage(primaryStage).getRoot(), 800, 600));
+        });
 
-        addWorkerBtn.setOnAction(e-> MainController.addWorker(workers, primaryStage , worker));
+        addWorkerBtn.setOnAction(e-> {
+            try {
+                MainController.addWorker(listOfWorkers, primaryStage, worker);
+            } catch (PermissionDeniedException ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
 
-        addBookBtn.setOnAction(e-> MainController.addBook(books, primaryStage, worker));
+        addBookBtn.setOnAction(e-> {
+                BookForm bookForm = new BookForm();
+                bookForm.newBookForm(primaryStage, worker, listOfBooks, listOfWorkers);
+        });
 
         bookTableView.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
@@ -277,7 +287,7 @@ public class MainPage{
         
         workerTableView.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
-                if(workerTableView.getSelectionModel().getSelectedItem().getACCESSLEVEL().toString().equals("ADMIN")){
+                if(workerTableView.getSelectionModel().getSelectedItem().getAccessLevel() instanceof Administrator){
                     return;
                 }
                 Worker employee = workerTableView.getSelectionModel().getSelectedItem();
@@ -303,45 +313,45 @@ public class MainPage{
 
 //            books.addBooksToStock(new BuyOrders(bookIsbns, quantity,TotalBookPrice,worker.getFullName()));
             BookInfoHolder.getChildren().clear();
-            primaryStage.setScene(new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600));
+            primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
             primaryStage.setFullScreen(true);
        });
        
-       purchaseBookBtn.setOnAction(e -> {
-        System.out.println("purchase");
-        ArrayList<Integer> quantity = new ArrayList<>();
-        for (Node node: BookInfoHolder.getChildren()) {
-            GridPane g=(GridPane) node;
-            for (Node el: g.getChildren()) {
-               int q=0;
-                
-                if(el instanceof TextField)
-                {
-                    TextField t=(TextField) el;
-                    q = Integer.parseInt(t.getText());
-                    
-                    quantity.add(q);     
-                }
-                if(q>books.getBookQuantity(bookIsbns.get(BookInfoHolder.getChildren().indexOf(node)))){
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setContentText("Quantity is greater than the stock");
-                    alert.showAndWait();
-                    return;
-                }
-               
-            }
-            
-        }
-
-        PurchaseOrders purchase = new PurchaseOrders(bookIsbns, quantity, TotalBookPrice, worker.getFullName());
-//        books.removeBooksFromStock(purchase);
-        worker.addPurchases(purchase.getTotalPrice());
-        workers.rewirteFile();
-        BookInfoHolder.getChildren().clear();
-        primaryStage.setScene(new Scene(new MainPage(primaryStage, worker).getRoot(), 800, 600));
-        primaryStage.setFullScreen(true);
-        });
+//       purchaseBookBtn.setOnAction(e -> {
+//        System.out.println("purchase");
+//        ArrayList<Integer> quantity = new ArrayList<>();
+//        for (Node node: BookInfoHolder.getChildren()) {
+//            GridPane g=(GridPane) node;
+//            for (Node el: g.getChildren()) {
+//               int q=0;
+//
+//                if(el instanceof TextField)
+//                {
+//                    TextField t=(TextField) el;
+//                    q = Integer.parseInt(t.getText());
+//
+//                    quantity.add(q);
+//                }
+//                if(q>books.getBookQuantity(bookIsbns.get(BookInfoHolder.getChildren().indexOf(node)))){
+//                    Alert alert = new Alert(AlertType.ERROR);
+//                    alert.setTitle("Error");
+//                    alert.setContentText("Quantity is greater than the stock");
+//                    alert.showAndWait();
+//                    return;
+//                }
+//
+//            }
+//
+//        }
+//
+//        PurchaseOrders purchase = new PurchaseOrders(bookIsbns, quantity, TotalBookPrice, worker.getFullname());
+////!        books.removeBooksFromStock(purchase);
+////!        worker.addPurchases(purchase.getTotalPrice());
+////!        workers.rewirteFile();
+//        BookInfoHolder.getChildren().clear();
+//        primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
+//        primaryStage.setFullScreen(true);
+//        });
 
 
         BookTab.setOnSelectionChanged(e -> {
@@ -363,9 +373,7 @@ public class MainPage{
 
     public BorderPane getRoot() {
         return root;
-    }  
-
-
+    }
 
     public BorderPane getRightBook() {
         right = new BorderPane();
@@ -382,26 +390,13 @@ public class MainPage{
         //! FIXING THIS PART
         //! FIXING THIS PART
 
-        if(worker instanceof Librarian){
-//            worker = (Librarian) worker;
-            boolean hasAccess = ((Librarian) worker).isPermitionToBill();
-            System.out.println("THis nigga is " + hasAccess);
-            if(!hasAccess){
-                purchaseBookBtn.setDisable(true);
-            }
+        if(worker.getAccessLevel().getSellBooksBehaviour() instanceof NoPermissionToSellBooks){
+            purchaseBookBtn.setDisable(true);
         }
 
-        if(worker instanceof Manager){
-//            worker = (Manager) worker;
-            boolean hasAccess = ((Manager) worker).isPermitionToPurchse();
-            if(!hasAccess){
-                addBookToStockBtn.setDisable(true);
-            }
+        if(worker.getAccessLevel().getAddNewBooksBehaviour() instanceof NoPermissionToAddNewBooks){
+            addBookToStockBtn.setDisable(true);
         }
-
-
-
-
 
         purchaseBookBtn.setStyle(styles.getLogOutBtnStyle());
         purchaseBookBtnHolder.setAlignment(Pos.BOTTOM_CENTER);
@@ -419,7 +414,6 @@ public class MainPage{
 
         right.setCenter(EmployeeInfoHolder);
 
-        
         return right;
     }
 
@@ -478,26 +472,26 @@ public class MainPage{
         grid.setHgap(20);
         grid.setVgap(20);
 
-        workerFullName = new Label(tempworker.getFullName());
+        workerFullName = new Label(tempworker.getFullname());
         workerFullName.setStyle(styles.getSalesLabel());
         TextField newName = new TextField();
         newName.setStyle(styles.getLoginTextFieldStyle());
         
-        Label totalSales= new Label("Sales : "+tempworker.getTotalPurchases());
-        totalSales.setStyle(styles.getSalesLabel());
-        Label totalBuys= new Label("Bought : "+tempworker.getTotalBuys());
-        totalBuys.setStyle(styles.getSalesLabel());
+//!        Label totalSales= new Label("Sales : "+tempworker.getTotalPurchases());
+//!        totalSales.setStyle(styles.getSalesLabel());
+//!        Label totalBuys= new Label("Bought : "+tempworker.getTotalBuys());
+//!        totalBuys.setStyle(styles.getSalesLabel());
         workerEmail = new Label(tempworker.getEmail());
         workerEmail.setStyle(styles.getSalesLabel());
         TextField newEmail = new TextField();
         newEmail.setStyle(styles.getLoginTextFieldStyle());
                         
-        ChoiceBox<Worker.ACCESSLEVEL> newAccessLevel = new ChoiceBox<>();
-        newAccessLevel.getItems().addAll(Worker.ACCESSLEVEL.values());
+        ChoiceBox<AccessLevel> newAccessLevel = new ChoiceBox<>();
+        newAccessLevel.getItems().addAll(new Librarian(), new Manager(), new Administrator());//! Check this out later
         newAccessLevel.setStyle(styles.getSearchListStyle());
-        newAccessLevel.setValue(tempworker.getACCESSLEVEL());
+        newAccessLevel.setValue(tempworker.getAccessLevel());
         
-        CheckBox newPermitionToPurchaseCheckBox = new CheckBox("Permition to purchase");
+        CheckBox newPermitionToPurchaseCheckBox = new CheckBox("Permission to purchase");
         
         newPermitionToPurchaseCheckBox.setOnAction(e->{
             if(newPermitionToPurchaseCheckBox.isSelected()){
@@ -508,7 +502,7 @@ public class MainPage{
             System.out.println(permitionToPurchase);
         });
         
-        CheckBox newPremitionToCheckLib = new CheckBox("Check librararian");
+        CheckBox newPremitionToCheckLib = new CheckBox("Check Librarians");
 
         newPremitionToCheckLib.setOnAction(e->{
             if(newPremitionToCheckLib.isSelected()){
@@ -527,26 +521,7 @@ public class MainPage{
         });
 
         newAccessLevel.setOnKeyPressed(e->{
-            if(KeyCode.ENTER == e.getCode()){
-                if(newAccessLevel.getValue().equals(ACCESSLEVEL.MANAGER)){
-                    grid.getChildren().remove(newPremitionToBill);
-                    
-                    grid.add(newPremitionToCheckLib, 0, 6);
-                    grid.add(newPermitionToPurchaseCheckBox, 1, 6);
-                    if(tempworker instanceof Manager){
-                        newPremitionToCheckLib.setSelected(((Manager) tempworker).isCheckLibrarians());
-                        newPermitionToPurchaseCheckBox.setSelected(((Manager) tempworker).isPermitionToPurchse());
-                    }
-                } 
-                else if(newAccessLevel.getValue().equals(ACCESSLEVEL.LIBRARIAN)){
-                    grid.getChildren().removeAll(newPremitionToCheckLib, newPermitionToPurchaseCheckBox);
-                    grid.add(newPremitionToBill, 0, 6);
-                    if (tempworker instanceof Librarian) {
-                        newPremitionToBill.setSelected(((Librarian) tempworker).isPermitionToBill());
-                    }
-                        System.out.println(newPremitionToBill.isSelected());
-                }
-            }
+            tempworker.setAccessLevel(newAccessLevel.getValue());
         });
 
 
@@ -564,27 +539,33 @@ public class MainPage{
 
         Button deletWorkerBtn = new Button("Delete Worker");
         deletWorkerBtn.setStyle(styles.getLogOutBtnStyle());
-        if(!(worker.getACCESSLEVEL().toString().equals("ADMIN"))){
+        if(!(worker.getAccessLevel() instanceof Administrator)){
             deletWorkerBtn.setDisable(true);
         }
         Button editWorkerBtn = new Button("Edit Worker");
         editWorkerBtn.setStyle(styles.getLogOutBtnStyle());
-        if(!(worker.getACCESSLEVEL().toString().equals("ADMIN"))){
+        if(!(worker.getAccessLevel() instanceof Administrator)){
             editWorkerBtn.setDisable(true);
         }
 
         deletWorkerBtn.setOnAction(e -> {
-            workers.deleteWorker(tempworker);
+            try {
+                worker.getAccessLevel().fireWorker(listOfWorkers, tempworker);
+            } catch (PermissionDeniedException ex) {
+                throw new RuntimeException(ex);
+            }
             EmployeeInfoHolder.getChildren().clear();
-            primaryStage.setScene(new Scene(new MainPage(primaryStage, this.worker).getRoot(),800, 600));
+            primaryStage.setScene(new Scene(new MainPage(primaryStage, this.worker, listOfWorkers).getRoot(),800, 600));
             primaryStage.setFullScreen(true);
         });
 
         editWorkerBtn.setOnAction(e -> {
-            workers.editWorker(tempworker, workerFullName.getText(), workerEmail.getText(), newAccessLevel.getValue(), Float.parseFloat(workerSalary.getText()), workerPhoneNumber.getText()
-            ,permitionToCheckLib, permitionToPurchase, permitionToBill);
-            EmployeeInfoHolder.getChildren().clear();
-            primaryStage.setScene(new Scene(new MainPage(primaryStage, this.worker).getRoot(),800, 600));
+            try {
+                worker.getAccessLevel().editWorker(tempworker, newName.getText(), newEmail.getText(), newPhoneNumber.getText(), Double.parseDouble(newSalary.getText()), newAccessLevel.getValue(), tempworker.getAccessLevel().getSellBooksBehaviour(), tempworker.getAccessLevel().getResupplyStockBehaviour(), tempworker.getAccessLevel().getAddNewBooksBehaviour(), tempworker.getAccessLevel().getCheckWorkerBehaviour());
+            } catch (PermissionDeniedException ex) {
+                System.out.println(ex.getMessage());
+            }
+            primaryStage.setScene(new Scene(new MainPage(primaryStage, this.worker, listOfWorkers).getRoot(),800, 600));
             primaryStage.setFullScreen(true);
         });
 
@@ -635,9 +616,9 @@ public class MainPage{
         grid.add(newAccessLevel, 0, 2);
         grid.add(workerSalary, 0, 3);
         grid.add(workerPhoneNumber, 0, 4);
-        grid.add(totalSales, 0, 5);
-        if(tempworker instanceof Manager||tempworker instanceof Admin)
-            grid.add(totalBuys,0,7);
+//!        grid.add(totalSales, 0, 5);
+//!        if(tempworker instanceof Manager||tempworker instanceof Admin)
+//!        grid.add(totalBuys,0,7);
         grid.add(deletWorkerBtn, 0, 8);
         grid.add(editWorkerBtn, 1, 8);
         
