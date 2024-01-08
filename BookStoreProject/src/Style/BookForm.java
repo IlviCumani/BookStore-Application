@@ -1,6 +1,9 @@
 package Style;
 
 import BookstoreData.Book;
+import IO.BookFileIOService;
+import IO.CompatibleTypes;
+import IO.FileIO;
 import StaffFolder.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,10 +13,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BookForm {
-
+    private final FileIO FILESAVER = new FileIO(new BookFileIOService());
     public void newBookForm(Stage primaryStage, Worker temp, ArrayList<Book> listOfBooks, ArrayList<Worker> listOfWorkers) {
         SettingStyles settingStyles = new SettingStyles();
         Stage stage = new Stage();
@@ -124,7 +128,16 @@ public class BookForm {
 //                books.add(newBook);
 
 //            }
-            listOfBooks.add(temp.getAccessLevel().addNewBook(titleTF.getText(), isbnTF.getText(), authorTF.getText(), genreTF.getText(), publisherTF.getText(), Double.parseDouble(priceTF.getText()), rbPaperback.isSelected()));
+            try {
+                listOfBooks.add(temp.getAccessLevel().addNewBook(titleTF.getText(), isbnTF.getText(), authorTF.getText(), genreTF.getText(), publisherTF.getText(), Double.parseDouble(priceTF.getText()), rbPaperback.isSelected()));
+                ArrayList<Serializable> listOfSerializibles = CompatibleTypes.fromBookToSerializble(listOfBooks);
+                FILESAVER.write(listOfSerializibles);
+            }catch (IllegalStateException es) {
+                System.out.println(es.getMessage());
+            }
+
+
+
             primaryStage.setScene(new Scene(new MainPage(primaryStage, temp, listOfWorkers).getRoot()));
             primaryStage.setFullScreen(true);
             stage.close();
