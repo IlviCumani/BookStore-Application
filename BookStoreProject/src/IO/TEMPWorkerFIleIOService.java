@@ -3,13 +3,13 @@ package IO;
 import java.io.*;
 import java.util.ArrayList;
 
-public class WorkerFIleIOService implements FileIOServiceInjectable{
+public class TEMPWorkerFIleIOService implements FileIOServiceInjectable{
 
 
     private File file;
     private final String PATH = "BookStoreProject/tempworkers.dat";
 
-    public WorkerFIleIOService() {
+    public TEMPWorkerFIleIOService() {
         this.file = new File(PATH);
     }
 

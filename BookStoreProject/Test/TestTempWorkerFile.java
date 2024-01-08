@@ -1,5 +1,5 @@
 import IO.FileIO;
-import IO.WorkerFIleIOService;
+import IO.TEMPWorkerFIleIOService;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
@@ -31,7 +31,7 @@ public class TestTempWorkerFile {
 
     @Test
     void test_writeInATempFile() {
-        WorkerFIleIOService fIleIOService = new WorkerFIleIOService();
+        TEMPWorkerFIleIOService fIleIOService = new TEMPWorkerFIleIOService();
         FileIO fileIO = new FileIO(fIleIOService);
         fileIO.write(listOfWorkers);
         assertEquals(listOfWorkers, fileIO.read());
@@ -39,7 +39,7 @@ public class TestTempWorkerFile {
 
     @Test
     void test_rewriteInATempFileAfterAddingAWorker() {
-        WorkerFIleIOService fIleIOService = new WorkerFIleIOService();
+        TEMPWorkerFIleIOService fIleIOService = new TEMPWorkerFIleIOService();
         FileIO fileIO = new FileIO(fIleIOService);
         fileIO.write(listOfWorkers);
         Worker dummyWorker = new Worker();
@@ -50,7 +50,7 @@ public class TestTempWorkerFile {
 
     @Test
     void test_rewriteInATempFileAfterRemovingAWorker() {
-        WorkerFIleIOService fileIOService = new WorkerFIleIOService();
+        TEMPWorkerFIleIOService fileIOService = new TEMPWorkerFIleIOService();
         FileIO fileIO = new FileIO(fileIOService);
         Worker dummy_worker = new Worker();
         listOfWorkers.add(dummy_worker);
