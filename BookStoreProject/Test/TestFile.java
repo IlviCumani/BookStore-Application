@@ -1,6 +1,7 @@
 import IO.FileIO;
 import IO.FileIOServiceInjectable;
 import IO.MockFileIOService;
+import IO.WorkerFileIOService;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
@@ -22,9 +23,9 @@ public class TestFile {
 
     @BeforeEach
     void setUp() {
-        Worker librarian = new Worker("Lib", "librarian", "12345678", "0675850510", null, new Librarian(), 500);
-        Worker manager = new Worker("manager", "manager", "12345678", "0675850510", null, new Manager(), 700);
-        Worker admin = new Worker("admin", "admin", "12345678", "0675850510", null, new Administrator(), 1000);
+        Worker librarian = new Worker("Lib_Bosi", "Librarian", "1", "0675850510", null, new Librarian(), 500);
+        Worker manager = new Worker("manager", "Manager", "1", "0675850510", null, new Manager(), 700);
+        Worker admin = new Worker("admin", "Admin", "1", "0675850510", null, new Administrator(), 1000);
         listOfWorkers = new ArrayList<>();
         Worker[] workers = {librarian, manager, admin};
         listOfWorkers.addAll(List.of(workers));
@@ -61,5 +62,10 @@ public class TestFile {
         assertEquals(fileIoService, fileIO.getFileService());
     }
 
+    @Test
+    void test_createWantedWOrkers() {
+        FileIO theFIleIO = new FileIO(new WorkerFileIOService());
+        theFIleIO.write(listOfWorkers);
+    }
 
 }
