@@ -1,9 +1,8 @@
 package StyleControllers;
 
-import java.io.Serializable;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-
+import IO.FileIO;
+import IO.WorkerFileIOService;
+import StaffFolder.Worker;
 import Style.MainPage;
 import Style.SettingStyles;
 import javafx.scene.Scene;
@@ -11,8 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import IO.*;
-import StaffFolder.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class LoginController{
 
