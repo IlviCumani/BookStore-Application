@@ -41,7 +41,6 @@ public class WorkerForm {
         passwordText.setPromptText("password");
         passwordText.setStyle(settingStyles.getLoginTextFieldStyle());
 
-
         //date picker to choose date
         DatePicker datePicker = new DatePicker();
         datePicker.setPromptText("Date of birth");

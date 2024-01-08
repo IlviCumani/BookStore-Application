@@ -85,14 +85,14 @@ public class MainController {
 
             Table.setItems(data);
 
-            for(int i = 0; i < args.length; i++) {
-                TableColumn titleCol = new TableColumn(args[i]);
-                titleCol.setStyle(styles.getTableColumnStyle());
-                titleCol.setPrefWidth(185);
-                titleCol.setCellValueFactory(new PropertyValueFactory<Worker, String>(args[i]));
-                
-                Table.getColumns().add(titleCol);
-            }
+        for (String arg : args) {
+            TableColumn titleCol = new TableColumn(arg);
+            titleCol.setStyle(styles.getTableColumnStyle());
+            titleCol.setPrefWidth(185);
+            titleCol.setCellValueFactory(new PropertyValueFactory<Worker, String>(arg));
+
+            Table.getColumns().add(titleCol);
+        }
         return Table;
     }
 }
