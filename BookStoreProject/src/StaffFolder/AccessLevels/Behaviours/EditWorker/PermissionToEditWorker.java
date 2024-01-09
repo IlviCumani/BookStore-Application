@@ -10,7 +10,7 @@ import StaffFolder.Worker;
 public class PermissionToEditWorker implements EditWorkerBehaviour{
 
     @Override
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour) throws PermissionDeniedException {
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
         if(worker.getAccessLevel() instanceof Administrator){
             throw new IllegalArgumentException("You can't edit administrator");
         }
@@ -22,9 +22,5 @@ public class PermissionToEditWorker implements EditWorkerBehaviour{
         worker.setPhone(phoneNumber);
         worker.setSalary(salary);
         worker.setAccessLevel(accessLevel);
-        worker.getAccessLevel().setSellBookBehaviour(sellBooksBehaviour);
-        worker.getAccessLevel().setResupplyStockBehaviour(resupplyStockBehaviour);
-        worker.getAccessLevel().setAddNewBooksBehaviour(addNewBooksBehaviour);
-        worker.getAccessLevel().setCheckWorkerBehaviour(checkWorkerBehaviour);
     }
 }

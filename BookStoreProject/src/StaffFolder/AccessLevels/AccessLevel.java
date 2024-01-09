@@ -25,7 +25,7 @@ public interface AccessLevel extends Serializable {
     public void setAddNewBooksBehaviour(AddNewBooksBehaviour addNewBooksBehaviour);
     public boolean fireWorker(ArrayList<Worker> listOfWorkers, Worker worker) throws PermissionDeniedException;
     public void addNewWorker(ArrayList<Worker> listOfWorker, Worker worker) throws PermissionDeniedException;
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour) throws PermissionDeniedException;
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException;
     public SellBooksBehaviour getSellBooksBehaviour();
     public ResupplyStockBehaviour getResupplyStockBehaviour();
     public AddNewBooksBehaviour getAddNewBooksBehaviour();

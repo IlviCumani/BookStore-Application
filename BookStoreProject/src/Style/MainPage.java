@@ -40,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainPage{
 
@@ -74,8 +75,11 @@ public class MainPage{
     private boolean permitionToCheckLib;
     private boolean permitionToBill;
     private BillData billData;
+    private HashMap<Book, Integer> booksToSell = new HashMap<>();
+    private  Book clickedBook;
 
     private final FileIO FILESAVER = new FileIO(new WorkerFileIOService());
+    private final FileIO BOOKFILESAVER = new FileIO(new BookFileIOService());
 
 
     public MainPage(Stage primaryStage, Worker worker, ArrayList<Worker> listOfWorkers) {
@@ -281,6 +285,7 @@ public class MainPage{
         bookTableView.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
                 Book book = bookTableView.getSelectionModel().getSelectedItem();
+                clickedBook = book;
                 BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
             }
         });
@@ -297,25 +302,38 @@ public class MainPage{
         });
         
         addBookToStockBtn.setOnAction(e -> {
-    
-            ArrayList<Integer> quantity = new ArrayList<>();
 
-            for (Node node: BookInfoHolder.getChildren()) {
-                GridPane g=(GridPane) node;
-                for (Node el: g.getChildren()) {
-                    if(el instanceof TextField)
-                    {
-                        TextField t=(TextField) el;
-                        quantity.add(Integer.parseInt(t.getText()));  
-                    }
-                }
+            for (Book book : booksToSell.keySet()) {
+                worker.getAccessLevel().resupplyStock(book, booksToSell.get(book));
             }
-
-//            books.addBooksToStock(new BuyOrders(bookIsbns, quantity,TotalBookPrice,worker.getFullName()));
+            this.saveBookFile(listOfBooks);
+            booksToSell.clear();
             BookInfoHolder.getChildren().clear();
             primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
             primaryStage.setFullScreen(true);
        });
+
+        purchaseBookBtn.setOnAction(e -> {
+            System.out.println("BOOKS TO SELL" + booksToSell);
+            for (Book book : booksToSell.keySet()) {
+                try{
+                    worker.getAccessLevel().sellBooks(book, booksToSell.get(book));
+                }catch (PermissionDeniedException | IllegalArgumentException ex){
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText(ex.getMessage());
+                    alert.showAndWait();
+                    primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
+                    primaryStage.setFullScreen(true);
+                    return;
+                }
+            }
+            this.saveBookFile(listOfBooks);
+            booksToSell.clear();
+            BookInfoHolder.getChildren().clear();
+            primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
+            primaryStage.setFullScreen(true);
+        });
        
 //       purchaseBookBtn.setOnAction(e -> {
 //        System.out.println("purchase");
@@ -343,11 +361,6 @@ public class MainPage{
 //            }
 //
 //        }
-//
-//        PurchaseOrders purchase = new PurchaseOrders(bookIsbns, quantity, TotalBookPrice, worker.getFullname());
-////!        books.removeBooksFromStock(purchase);
-////!        worker.addPurchases(purchase.getTotalPrice());
-////!        workers.rewirteFile();
 //        BookInfoHolder.getChildren().clear();
 //        primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
 //        primaryStage.setFullScreen(true);
@@ -399,6 +412,7 @@ public class MainPage{
         }
 
         purchaseBookBtn.setStyle(styles.getLogOutBtnStyle());
+
         purchaseBookBtnHolder.setAlignment(Pos.BOTTOM_CENTER);
         purchaseBookBtnHolder.getChildren().add(purchaseBookBtn);
         right.setBottom(BottomVBox);
@@ -417,9 +431,13 @@ public class MainPage{
         return right;
     }
 
+//? HEJFJFEUJHEUEHVUHEFUHUHEUEEEeervgrbrbrtbrtbrbrbrbrbrbrbrbrbbrfbrfbr
+//? HEJFJFEUJHEUEHVUHEFUHUHEUEEEeervgrbrbrtbrtbrbrbrbrbrbrbrbrbbrfbrfbr
+//? HEJFJFEUJHEUEHVUHEFUHUHEUEEEeervgrbrbrtbrtbrbrbrbrbrbrbrbrbbrfbrfbr//? HEJFJFEUJHEUEHVUHEFUHUHEUEEEeervgrbrbrtbrtbrbrbrbrbrbrbrbrbbrfbrfbr
+
 
     public GridPane getPurchaseBookPane(Book book){
-        
+
         GridPane grid = new GridPane();
         grid.setStyle(styles.getSalesGridPane());
         grid.setPrefHeight(100);
@@ -442,6 +460,7 @@ public class MainPage{
             total.setStyle(styles.getSalesLabel());
             grid.getChildren().remove(total);
             if(KeyCode.ENTER == e.getCode()){
+                booksToSell.put(book, Integer.parseInt(nrBooks.getText()));
                 total.setText("" + (Double.parseDouble(bookPrice.getText()) * Double.parseDouble(nrBooks.getText())));
                 TotalBookPrice += Double.parseDouble(total.getText());
                 System.out.println(TotalBookPrice);
@@ -454,6 +473,8 @@ public class MainPage{
                 TotalLabelHbox.getChildren().add(totalLabel);
             }
         });
+
+
         
         grid.add(bookISBN, 0, 0);
         grid.add(bookPrice, 1, 0);
@@ -529,9 +550,6 @@ public class MainPage{
 //            System.out.println(permitionToBill);
 //        });
 
-
-
-
         workerSalary = new Label("" + tempworker.getSalary());
         workerSalary.setStyle(styles.getSalesLabel());
         TextField newSalary = new TextField();
@@ -568,9 +586,9 @@ public class MainPage{
         editWorkerBtn.setOnAction(e -> {
             System.out.println("Edit worker");
             try {
-                worker.getAccessLevel().editWorker(tempworker, workerFullName.getText(), workerEmail.getText(), workerPhoneNumber.getText(), Double.parseDouble(workerSalary.getText()), newAccessLevel[0], tempworker.getAccessLevel().getSellBooksBehaviour(), tempworker.getAccessLevel().getResupplyStockBehaviour(), tempworker.getAccessLevel().getAddNewBooksBehaviour(), tempworker.getAccessLevel().getCheckWorkerBehaviour());
+                worker.getAccessLevel().editWorker(tempworker, workerFullName.getText(), workerEmail.getText(), workerPhoneNumber.getText(), Double.parseDouble(workerSalary.getText()), newAccessLevel[0]);
                 this.saveFile(listOfWorkers);
-            } catch (PermissionDeniedException ex) {
+            }catch (PermissionDeniedException ex) {
                 System.out.println(ex.getMessage());
             }
 
@@ -625,18 +643,21 @@ public class MainPage{
         grid.add(newAccessLevelString, 0, 2);
         grid.add(workerSalary, 0, 3);
         grid.add(workerPhoneNumber, 0, 4);
-//!        grid.add(totalSales, 0, 5);
-//!        if(tempworker instanceof Manager||tempworker instanceof Admin)
-//!        grid.add(totalBuys,0,7);
         grid.add(deletWorkerBtn, 0, 8);
         grid.add(editWorkerBtn, 1, 8);
         
         return grid;
     }
+
     public void saveFile(ArrayList<Worker> listOfWorkers) {
         ArrayList<Serializable>  listOfSerializibles = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
         FILESAVER.write(listOfSerializibles);
-
     }
+
+    public void saveBookFile(ArrayList<Book> listOfBooks) {
+        ArrayList<Serializable>  listOfSerializibles = CompatibleTypes.fromBookToSerializble(listOfBooks);
+        BOOKFILESAVER.write(listOfSerializibles);
+    }
+
 
 }
