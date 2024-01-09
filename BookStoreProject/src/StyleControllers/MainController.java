@@ -1,19 +1,23 @@
 package StyleControllers;
 
-import java.util.ArrayList;
-import BookstoreData.*;
+import BookstoreData.Book;
+import IO.CompatibleTypes;
+import IO.FileIO;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Manager;
-import Style.*;
 import StaffFolder.Worker;
+import Style.SettingStyles;
+import Style.WorkerForm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MainController {
 
@@ -30,9 +34,17 @@ public class MainController {
 //    }
 
     //Add Worker
-    public static void addWorker(ArrayList<Worker> listOfWorkers, Stage primaryStage, Worker worker) throws PermissionDeniedException {
+    public static void addWorker(ArrayList<Worker> listOfWorkers, Stage primaryStage, Worker worker, FileIO fileIO) throws PermissionDeniedException {
         Worker newWorker = new WorkerForm().newWorkerForm(primaryStage);
-        worker.getAccessLevel().addNewWorker(listOfWorkers, newWorker);
+        try {
+            worker.getAccessLevel().addNewWorker(listOfWorkers, newWorker);
+            ArrayList<Serializable> listOfSerializables = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
+            fileIO.write(listOfSerializables);
+        }catch (PermissionDeniedException e) {
+            System.out.println(e.getMessage());
+        }
+
+
     }
 
     //Add Book

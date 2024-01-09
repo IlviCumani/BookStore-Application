@@ -1,31 +1,30 @@
 package Style;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import BookstoreData.Book;
+
+import IO.BookFileIOService;
+import IO.FileIO;
+
+import IO.WorkerFileIOService;
 import Orders.BillData;
-import Orders.PurchaseOrders;
+
+import StaffFolder.AccessLevels.AccessLevel;
+import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Behaviours.CheckWorkers.NoPermissionToCheckWorker;
 import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Behaviours.ManageBooks.NoPermissionToAddNewBooks;
-import StaffFolder.AccessLevels.Behaviours.ManageBooks.PermissionToAddNewBook;
 import StaffFolder.AccessLevels.Behaviours.SellBooks.NoPermissionToSellBooks;
+import StaffFolder.AccessLevels.Librarian;
+import StaffFolder.AccessLevels.Manager;
+import StaffFolder.Worker;
+
+import IO.CompatibleTypes;
+
 import StyleControllers.MainController;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -37,11 +36,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
-import StaffFolder.*;
-import StaffFolder.AccessLevels.*;
-
-import IO.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MainPage{
 
@@ -76,6 +74,8 @@ public class MainPage{
     private boolean permitionToCheckLib;
     private boolean permitionToBill;
     private BillData billData;
+
+    private final FileIO FILESAVER = new FileIO(new WorkerFileIOService());
 
 
     public MainPage(Stage primaryStage, Worker worker, ArrayList<Worker> listOfWorkers) {
@@ -267,7 +267,7 @@ public class MainPage{
 
         addWorkerBtn.setOnAction(e-> {
             try {
-                MainController.addWorker(listOfWorkers, primaryStage, worker);
+                MainController.addWorker(listOfWorkers, primaryStage, worker, FILESAVER);
             } catch (PermissionDeniedException ex) {
                 System.out.println(ex.getMessage());
             }
@@ -556,6 +556,7 @@ public class MainPage{
         deletWorkerBtn.setOnAction(e -> {
             try {
                 worker.getAccessLevel().fireWorker(listOfWorkers, tempworker);
+                this.saveFile(listOfWorkers);
             } catch (PermissionDeniedException ex) {
                 throw new RuntimeException(ex);
             }
@@ -568,9 +569,11 @@ public class MainPage{
             System.out.println("Edit worker");
             try {
                 worker.getAccessLevel().editWorker(tempworker, workerFullName.getText(), workerEmail.getText(), workerPhoneNumber.getText(), Double.parseDouble(workerSalary.getText()), newAccessLevel[0], tempworker.getAccessLevel().getSellBooksBehaviour(), tempworker.getAccessLevel().getResupplyStockBehaviour(), tempworker.getAccessLevel().getAddNewBooksBehaviour(), tempworker.getAccessLevel().getCheckWorkerBehaviour());
+                this.saveFile(listOfWorkers);
             } catch (PermissionDeniedException ex) {
                 System.out.println(ex.getMessage());
             }
+
             primaryStage.setScene(new Scene(new MainPage(primaryStage, this.worker, listOfWorkers).getRoot(),800, 600));
             primaryStage.setFullScreen(true);
         });
@@ -630,4 +633,10 @@ public class MainPage{
         
         return grid;
     }
+    public void saveFile(ArrayList<Worker> listOfWorkers) {
+        ArrayList<Serializable>  listOfSerializibles = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
+        FILESAVER.write(listOfSerializibles);
+
+    }
+
 }
