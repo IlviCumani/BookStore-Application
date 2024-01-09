@@ -11,5 +11,5 @@ import StaffFolder.Worker;
 import java.io.Serializable;
 
 public interface EditWorkerBehaviour extends Serializable {
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour)throws PermissionDeniedException;
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel)throws PermissionDeniedException;
 }

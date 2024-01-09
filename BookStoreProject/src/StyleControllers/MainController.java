@@ -35,15 +35,11 @@ public class MainController {
 
     //Add Worker
     public static void addWorker(ArrayList<Worker> listOfWorkers, Stage primaryStage, Worker worker, FileIO fileIO) throws PermissionDeniedException {
-        Worker newWorker = new WorkerForm().newWorkerForm(primaryStage);
-        try {
-            worker.getAccessLevel().addNewWorker(listOfWorkers, newWorker);
-            ArrayList<Serializable> listOfSerializables = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
-            fileIO.write(listOfSerializables);
-        }catch (PermissionDeniedException e) {
-            System.out.println(e.getMessage());
-        }
-
+//        Worker newWorker = new WorkerForm().newWorkerForm(primaryStage, worker, listOfWorkers);
+            new WorkerForm().newWorkerForm(primaryStage, worker, listOfWorkers, fileIO);
+//            worker.getAccessLevel().addNewWorker(listOfWorkers, newWorker);
+//            ArrayList<Serializable> listOfSerializables = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
+//            fileIO.write(listOfSerializables);
 
     }
 

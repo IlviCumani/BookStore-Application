@@ -1,23 +1,37 @@
 package Style;
 
+import IO.CompatibleTypes;
+import IO.FileIO;
 import StaffFolder.AccessLevels.AccessLevel;
 import StaffFolder.AccessLevels.Administrator;
+import StaffFolder.AccessLevels.Behaviours.Exceptions.PermissionDeniedException;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
 import StaffFolder.Worker;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class WorkerForm {
 
-    public Worker newWorkerForm(Stage primarystage) {
+    public void newWorkerForm(Stage primarystage, Worker activeWorker, ArrayList<Worker> listOfWorkers, FileIO fileIO)throws PermissionDeniedException {
         System.out.println("Hello From Worker Form");
         Stage stage = primarystage;
         SettingStyles settingStyles = new SettingStyles();
+        GridPane pane = new GridPane();
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(50, 10, 50, 10));
+        pane.setVgap(15);
+        pane.setHgap(10);
+        pane.setStyle(settingStyles.getLoginRootStyle());
 
         TextField nameText = new TextField();
         nameText.setPromptText("name");
@@ -46,17 +60,6 @@ public class WorkerForm {
         datePicker.setStyle(settingStyles.getDatePicker());
         datePicker.setPrefWidth(270);
 
-        //Toggle group of radio button
-//        ToggleGroup groupGender = new ToggleGroup();
-//        RadioButton maleRadio = new RadioButton("male");
-//        maleRadio.setStyle(settingStyles.getRadioBtn());
-//        maleRadio.setToggleGroup(groupGender);
-//        RadioButton femaleRadio = new RadioButton("female");
-//        femaleRadio.setStyle(settingStyles.getRadioBtn());
-//        femaleRadio.setToggleGroup(groupGender);
-//        HBox radioBox = new HBox(20);
-//        radioBox.getChildren().addAll(maleRadio, femaleRadio);
-
         //Check box for permissions
         CheckBox javaCheckBox = new CheckBox("Sell Books");
         javaCheckBox.setIndeterminate(false);
@@ -69,73 +72,31 @@ public class WorkerForm {
         //Choice box for location
         ChoiceBox<String> locationChoiceBox = new ChoiceBox<>();
         locationChoiceBox.getItems().addAll("Librarian", "Manager", "Administrator");
-        //locationChoiceBox.setValue("Librarian");
+        locationChoiceBox.setValue("Librarian");
         locationChoiceBox.setStyle(settingStyles.getSearchListStyle());
         //setOnMouseEntered
-        locationChoiceBox.setOnKeyPressed(e -> {
-            KeyCombination keyCombination = KeyCombination.valueOf("Enter");
-
-//            if (keyCombination.match(e)) {
-//                if (locationChoiceBox.getValue().toString().equals("Librarian")) {
-//                    gridPane.getChildren().removeAll(PurchaseBooksCheckBox, checkLibrariansCheckBox);
-//                    gridPane.add(javaCheckBox, 1, 8);
-//                } else if (locationChoiceBox.getValue().toString().equals("Manager")) {
-//                    gridPane.getChildren().remove(javaCheckBox);
-//                    gridPane.add(PurchaseBooksCheckBox, 1, 8);
-//                    gridPane.add(checkLibrariansCheckBox, 1, 9);
-//                } else {
-//                    gridPane.getChildren().removeAll(javaCheckBox, PurchaseBooksCheckBox, checkLibrariansCheckBox);
-//                }
-//            }
-        });
 
         //Label for register
         Button buttonRegister = new Button("Register");
-//
-//        buttonRegister.setOnMouseClicked(event ->{
-//            String name = nameText.getText();
-//            String email=emailText.getText();
-//            String phone=phoneText.getText();
-//            float salary=Float.parseFloat(salaryText.getText());
-//            String password=passwordText.getText();
-//            String date= datePicker.getValue().toString();
-//            Gender gender;
-//            if(maleRadio.isSelected())gender=Gender.MALE;
-//            else gender=Gender.FEMALE;
-//            boolean librarian=locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Librarian");
-//            boolean manager=locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Manager");
-//            boolean admin=locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Administrator");
-//            boolean permitionToBill,permitionToPurchase,permitionToCheckLibrarians;
-//            permitionToBill=javaCheckBox.isSelected();
-//            permitionToPurchase=PurchaseBooksCheckBox.isSelected();
-//            permitionToCheckLibrarians=checkLibrariansCheckBox.isSelected();
-//
-//            if (admin){
-//                Worker worker=new Admin(name,phone,email,salary,date,gender,password, Worker.ACCESSLEVEL.ADMIN);
-//                writeWorkerToFile(worker);
-//                workerData.add(worker);
-//                stage.close();
-//
-//            }
-//            else if(manager){
-//                Worker worker=new Manager(name,phone,email,salary,date,gender,password, Worker.ACCESSLEVEL.MANAGER,permitionToPurchase,permitionToCheckLibrarians);
-//                writeWorkerToFile(worker);
-//                workerData.add(worker);
-//                stage.close();
-//            }
-//            else if(librarian){
-//                Worker worker=new Librarian(name,phone,email,date,gender,salary,password, Worker.ACCESSLEVEL.LIBRARIAN,permitionToBill);
-//                writeWorkerToFile(worker);
-//                workerData.add(worker);
-//                stage.close();
-//            }
-//            primarystage.setScene(new Scene(new MainPage(primarystage, workertemp).getRoot(),800, 600));
-//            primarystage.setFullScreen(true);
-//
-//
-//        });
+        buttonRegister.setStyle(settingStyles.getLogOutBtnStyle());
+
+        pane.add(nameText, 1, 0);
+        pane.add(emailText, 1, 1);
+        pane.add(phoneText, 1, 2);
+        pane.add(salaryText, 1, 3);
+        pane.add(passwordText, 1, 4);
+        pane.add(datePicker, 1, 5);
+        pane.add(locationChoiceBox, 1, 6);
+        pane.add(buttonRegister, 1, 7);
+
+        stage.setScene(new Scene(pane, 800, 600));
+        stage.setFullScreen(true);
+        stage.show();
+
         final Worker[] worker = {null};
+
         buttonRegister.setOnMouseClicked(e -> {
+            System.out.println("Hello from button register");
             String name = nameText.getText();
             String email = emailText.getText();
             String phone = phoneText.getText();
@@ -143,18 +104,28 @@ public class WorkerForm {
             String password = passwordText.getText();
             Date dateOfBirth =  java.sql.Date.valueOf(datePicker.getValue());
             AccessLevel accessLevel = null;
-            if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Librarian")){
+            if(locationChoiceBox.getSelectionModel().getSelectedItem().equals("Librarian")){
                 accessLevel = new Librarian();
             }
-            else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Manager")){
+            else if(locationChoiceBox.getSelectionModel().getSelectedItem().equals("Manager")){
                 accessLevel = new Manager();
             }
-            else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Administrator")){
+            else if(locationChoiceBox.getSelectionModel().getSelectedItem().equals("Administrator")){
                 accessLevel = new Administrator();
             }
-            worker[0] = new Worker(name, email, password, phone, dateOfBirth, accessLevel, salary);
+
+            try {
+                activeWorker.getAccessLevel().addNewWorker(listOfWorkers, new Worker(name, email, password, phone, dateOfBirth, accessLevel, salary));
+                ArrayList<Serializable> listOfSerializables = CompatibleTypes.fromWorkerToSerializible(listOfWorkers);
+                fileIO.write(listOfSerializables);
+                stage.setScene(new Scene(new MainPage(stage, activeWorker, listOfWorkers).getRoot()));
+                stage.setFullScreen(true);
+                stage.show();
+            } catch (PermissionDeniedException ex) {
+                System.out.println(ex.getMessage());
+            }
         });
 
-        return worker[0];
+
     }
 }

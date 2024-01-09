@@ -10,7 +10,7 @@ import StaffFolder.Worker;
 
 public class NoPermissionToEditWorker implements EditWorkerBehaviour{
     @Override
-    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel, SellBooksBehaviour sellBooksBehaviour, ResupplyStockBehaviour resupplyStockBehaviour, AddNewBooksBehaviour addNewBooksBehaviour, CheckWorkerBehaviour checkWorkerBehaviour) throws PermissionDeniedException {
+    public void editWorker(Worker worker, String fullName, String email, String phoneNumber, double salary, AccessLevel accessLevel) throws PermissionDeniedException {
         throw new PermissionDeniedException("You don't have permission to edit worker");
     }
 }
