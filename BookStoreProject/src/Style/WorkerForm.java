@@ -4,20 +4,19 @@ import StaffFolder.AccessLevels.AccessLevel;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
+import StaffFolder.Worker;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import StaffFolder.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 public class WorkerForm {
 
     public Worker newWorkerForm(Stage primarystage) {
-        Stage stage = new Stage();
+        System.out.println("Hello From Worker Form");
+        Stage stage = primarystage;
         SettingStyles settingStyles = new SettingStyles();
 
         TextField nameText = new TextField();
@@ -68,7 +67,7 @@ public class WorkerForm {
 
         GridPane gridPane = new GridPane();
         //Choice box for location
-        ChoiceBox locationChoiceBox = new ChoiceBox();
+        ChoiceBox<String> locationChoiceBox = new ChoiceBox<>();
         locationChoiceBox.getItems().addAll("Librarian", "Manager", "Administrator");
         //locationChoiceBox.setValue("Librarian");
         locationChoiceBox.setStyle(settingStyles.getSearchListStyle());
@@ -135,25 +134,27 @@ public class WorkerForm {
 //
 //
 //        });
-        String name = nameText.getText();
-        String email = emailText.getText();
-        String phone = phoneText.getText();
-        double salary = Double.parseDouble(salaryText.getText());
-        String password = passwordText.getText();
-        Date dateOfBirth =  java.sql.Date.valueOf(datePicker.getValue());
-        AccessLevel accessLevel = null;
-        if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Librarian")){
-            accessLevel = new Librarian();
-        }
-        else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Manager")){
-            accessLevel = new Manager();
-        }
-        else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Administrator")){
-            accessLevel = new Administrator();
-        }
+        final Worker[] worker = {null};
+        buttonRegister.setOnMouseClicked(e -> {
+            String name = nameText.getText();
+            String email = emailText.getText();
+            String phone = phoneText.getText();
+            double salary = Double.parseDouble(salaryText.getText());
+            String password = passwordText.getText();
+            Date dateOfBirth =  java.sql.Date.valueOf(datePicker.getValue());
+            AccessLevel accessLevel = null;
+            if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Librarian")){
+                accessLevel = new Librarian();
+            }
+            else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Manager")){
+                accessLevel = new Manager();
+            }
+            else if(locationChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Administrator")){
+                accessLevel = new Administrator();
+            }
+            worker[0] = new Worker(name, email, password, phone, dateOfBirth, accessLevel, salary);
+        });
 
-
-
-        return new Worker(name, email, password, phone, dateOfBirth, accessLevel, salary);
+        return worker[0];
     }
 }

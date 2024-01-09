@@ -1,7 +1,6 @@
 import IO.FileIO;
 import IO.FileIOServiceInjectable;
 import IO.MockFileIOService;
-import IO.WorkerFileIOService;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
@@ -62,10 +61,10 @@ public class TestFile {
         assertEquals(fileIoService, fileIO.getFileService());
     }
 
-    @Test
-    void test_createWantedWOrkers() {
-        FileIO theFIleIO = new FileIO(new WorkerFileIOService());
-        theFIleIO.write(listOfWorkers);
-    }
+//    @Test
+//    void test_createWantedWOrkers() {
+//        FileIO theFIleIO = new FileIO(new WorkerFileIOService());
+//        theFIleIO.write(listOfWorkers);
+//    }
 
 }
