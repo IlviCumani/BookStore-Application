@@ -54,13 +54,6 @@ public class BookForm {
         HBox hbox = new HBox(10);
         hbox.getChildren().addAll(rbPaperback, rbEbook);
 
-//		Label descriptionLbl = new Label("Description");
-//		TextArea descriptionTA = new TextArea();
-//		descriptionTA.setStyle("-fx-background-color: #0E273C; -fx-text-fill: #0E273C; -fx-font-size: 14px; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-border-color: #35CE8D; -fx-border-width: 3px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-padding: 5px;");
-//		descriptionTA.setPrefColumnCount(20);
-//		descriptionTA.setPrefRowCount(5);
-//		descriptionTA.setWrapText(true);
-
         Label authosLbl = new Label("Select an author: ");
         TextField authorTF = new TextField();
         authorTF.setStyle(settingStyles.getLoginTextFieldStyle());
@@ -98,36 +91,6 @@ public class BookForm {
 
 
         submitBtn.setOnAction(e -> {
-//            if(titleTF.getText().isEmpty() || isbnTF.getText().isEmpty() || priceTF.getText().isEmpty() || /*descriptionTA.getText().isEmpty() ||*/ authorTF.getText().isEmpty()) {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Error");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("Please fill all the fields");
-//                alert.showAndWait();
-//            }
-//            else if(!checkIsbn13( isbnTF.getText())){
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Error");
-//                alert.setHeaderText("Error");
-//                alert.setContentText("ISBN 13 is not valid");
-//                alert.showAndWait();
-//            }
-//            else {
-//                String isbn13 = isbnTF.getText();
-//                String title = titleTF.getText();
-//                float price = Float.parseFloat(priceTF.getText());
-////				String description = descriptionTA.getText();
-//                String publisher = publisherTF.getText();
-//                String genre = genreTF.getText();
-//                String author = authorTF.getText();
-//                boolean isPaperback = rbPaperback.isSelected();
-////				Book newBook = new Book(isbn13, title /* description*/, price, author, isPaperback,0);
-//                Book newBook = new Book(title, isbn13, author, genre, publisher, price, isPaperback);
-//
-//                boolean res = writeBookToFile(newBook);
-//                books.add(newBook);
-
-//            }
             try {
                 listOfBooks.add(temp.getAccessLevel().addNewBook(titleTF.getText(), isbnTF.getText(), authorTF.getText(), genreTF.getText(), publisherTF.getText(), Double.parseDouble(priceTF.getText()), rbPaperback.isSelected()));
                 ArrayList<Serializable> listOfSerializibles = CompatibleTypes.fromBookToSerializble(listOfBooks);
@@ -135,8 +98,6 @@ public class BookForm {
             }catch (IllegalStateException es) {
                 System.out.println(es.getMessage());
             }
-
-
 
             primaryStage.setScene(new Scene(new MainPage(primaryStage, temp, listOfWorkers).getRoot()));
             primaryStage.setFullScreen(true);
