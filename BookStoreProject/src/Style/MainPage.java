@@ -1,13 +1,13 @@
 package Style;
 
 import BookstoreData.Book;
-
 import IO.BookFileIOService;
+import IO.CompatibleTypes;
 import IO.FileIO;
-
 import IO.WorkerFileIOService;
+import IO.bill.BillResuplyFile;
+import IO.bill.BillWriteFIle;
 import Orders.BillData;
-
 import StaffFolder.AccessLevels.AccessLevel;
 import StaffFolder.AccessLevels.Administrator;
 import StaffFolder.AccessLevels.Behaviours.CheckWorkers.NoPermissionToCheckWorker;
@@ -17,12 +17,8 @@ import StaffFolder.AccessLevels.Behaviours.SellBooks.NoPermissionToSellBooks;
 import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
 import StaffFolder.Worker;
-
-import IO.CompatibleTypes;
-
 import StyleControllers.MainController;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -307,6 +303,8 @@ public class MainPage{
                 worker.getAccessLevel().resupplyStock(book, booksToSell.get(book));
             }
             this.saveBookFile(listOfBooks);
+            BillResuplyFile billResuplyFile = new BillResuplyFile();
+            billResuplyFile.write(booksToSell);
             booksToSell.clear();
             BookInfoHolder.getChildren().clear();
             primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
@@ -327,8 +325,11 @@ public class MainPage{
                     primaryStage.setFullScreen(true);
                     return;
                 }
+
             }
             this.saveBookFile(listOfBooks);
+            BillWriteFIle billWriteFIle = new BillWriteFIle();
+            System.out.println(billWriteFIle.write(booksToSell));
             booksToSell.clear();
             BookInfoHolder.getChildren().clear();
             primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));

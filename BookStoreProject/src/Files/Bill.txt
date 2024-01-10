@@ -1,0 +1,7 @@
+	Bill of the Books
+Today's date:	Bill of the Books
+Today's date:
+Bookssold: 
+		Book Title	isbn13	Price	Copies	Total
+		The Catcher in the Rye	9780316769488	15.99	20	319.8
+319.8
