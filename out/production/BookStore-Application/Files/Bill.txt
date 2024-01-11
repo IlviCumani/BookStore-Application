@@ -1,9 +1,7 @@
 	Bill of the Books
 Today's date:	Bill of the Books
 Today's date:
-Books sold: 
+Bookssold: 
 		Book Title	isbn13	Price	Copies	Total
-		Brave New World	9780060850524	11.99	20	239.8
-		1984	9780451524935	9.99	30	299.7
-		The Hobbit	9780345339683	8.99	40	359.6
-899.1
+		The Catcher in the Rye	9780316769488	15.99	20	319.8
+319.8
