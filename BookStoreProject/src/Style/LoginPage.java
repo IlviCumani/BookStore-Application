@@ -77,7 +77,9 @@ public class LoginPage{
 
         LogInBtn.setOnAction(e -> LoginController.login(EmailTextField.getText(), PasswordTextField.getText(), primaryStage, center));
     }
+    
     public BorderPane getRoot(){
         return root;
     }
+    
 }
