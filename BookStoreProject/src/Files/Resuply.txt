@@ -1,0 +1,8 @@
+	Bill of the Books
+Today's date:	Bill of the Books
+Today's date:
+Booksbought: 
+		Book Title	isbn13	Price	Copies	Total
+		Brave New World	9780060850524	11.99	40	479.6
+		The Great Gatsby	9780743273565	10.25	30	307.5
+787.1
