@@ -25,7 +25,6 @@ public class Librarian implements AccessLevel{
     private final AddNewWorkerBehaviour ADD_NEW_WORKER_BEHAVIOUR = new NoPermissionToAddNewWorker();
     private final EditWorkerBehaviour EDIT_WORKER_BEHAVIOUR = new NoPermissionToEditWorker();
 
-
     public Librarian(){
         sellBooksBehaviour = new PermissionToSellBooks();
     }

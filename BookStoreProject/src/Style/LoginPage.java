@@ -54,6 +54,7 @@ public class LoginPage{
         bottom.setPadding(new javafx.geometry.Insets(0, 0, 150, 0));
         LogInBtn.setPrefSize(100, 50);
         LogInBtn.setStyle(styles.getLoginBtnStyle());
+        LogInBtn.setId("LogInBtn");
         root.setBottom(bottom);
 
     
@@ -64,7 +65,9 @@ public class LoginPage{
         Label PasswordLabel = new Label("Password");
         PasswordLabel.setStyle(styles.getLoginLabelStyle());
         TextField EmailTextField = new TextField();
+        EmailTextField.setId("EmailTextField");
         PasswordField PasswordTextField = new PasswordField();
+        PasswordTextField.setId("PasswordTextField");
         center.add(EmailLabel, 0, 0);
         center.add(EmailTextField, 0, 1);
         center.add(PasswordLabel, 0, 2);
@@ -81,7 +84,7 @@ public class LoginPage{
     public BorderPane getRoot(){
         return root;
     }
-    
-    
+
+
 
 }
