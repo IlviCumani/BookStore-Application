@@ -11,7 +11,7 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 
-public abstract class FxTestingBase extends ApplicationTest {
+public class FxTestingBase extends ApplicationTest {
 
     //Please god give me the strength to finish this project, give me your blessing and help me write this code as fast as possible
     //Amen
