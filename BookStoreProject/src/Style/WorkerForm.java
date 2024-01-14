@@ -10,11 +10,10 @@ import StaffFolder.AccessLevels.Manager;
 import StaffFolder.Worker;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,28 +33,34 @@ public class WorkerForm {
         pane.setStyle(settingStyles.getLoginRootStyle());
 
         TextField nameText = new TextField();
+        nameText.setId("nameText");
         nameText.setPromptText("name");
         nameText.setStyle(settingStyles.getLoginTextFieldStyle());
 
         TextField emailText = new TextField();
+        emailText.setId("emailText");
         emailText.setPromptText("email");
         emailText.setStyle(settingStyles.getLoginTextFieldStyle());
 
         TextField phoneText = new TextField();
+        phoneText.setId("phoneText");
         phoneText.setPromptText("phone number");
         phoneText.setStyle(settingStyles.getLoginTextFieldStyle());
 
         TextField salaryText = new TextField();
+        salaryText.setId("salaryText");
         salaryText.setPromptText("salary");
         salaryText.setStyle(settingStyles.getLoginTextFieldStyle());
 
         //Text Field for Phone
         PasswordField passwordText = new PasswordField();
+        passwordText.setId("passwordText");
         passwordText.setPromptText("password");
         passwordText.setStyle(settingStyles.getLoginTextFieldStyle());
 
         //date picker to choose date
         DatePicker datePicker = new DatePicker();
+        datePicker.setId("datePicker");
         datePicker.setPromptText("Date of birth");
         datePicker.setStyle(settingStyles.getDatePicker());
         datePicker.setPrefWidth(270);
@@ -72,6 +77,7 @@ public class WorkerForm {
         //Choice box for location
         ChoiceBox<String> locationChoiceBox = new ChoiceBox<>();
         locationChoiceBox.getItems().addAll("Librarian", "Manager", "Administrator");
+        locationChoiceBox.setId("locationChoiceBox");
         locationChoiceBox.setValue("Librarian");
         locationChoiceBox.setStyle(settingStyles.getSearchListStyle());
         //setOnMouseEntered
@@ -79,7 +85,7 @@ public class WorkerForm {
         //Label for register
         Button buttonRegister = new Button("Register");
         buttonRegister.setStyle(settingStyles.getLogOutBtnStyle());
-
+        buttonRegister.setId("buttonRegister");
         pane.add(nameText, 1, 0);
         pane.add(emailText, 1, 1);
         pane.add(phoneText, 1, 2);

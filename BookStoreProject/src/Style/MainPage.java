@@ -18,6 +18,7 @@ import StaffFolder.AccessLevels.Librarian;
 import StaffFolder.AccessLevels.Manager;
 import StaffFolder.Worker;
 import StyleControllers.MainController;
+import StyleControllers.SearchBarBookController;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -179,6 +180,7 @@ public class MainPage{
         bookBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
         bookBottomPane.setStyle(styles.getBtnPane());
         addBookBtn = new Button("Add Book");
+        addBookBtn.setId("addBookBtn");
         addBookBtn.setStyle(styles.getLogOutBtnStyle());
         addBookToStockBtn = new Button("Add To Stock");
         addBookToStockBtn.setStyle(styles.getLogOutBtnStyle());
@@ -210,12 +212,14 @@ public class MainPage{
         tabPane.getTabs().add(EmployeeTab);
 
         workerTableView = MainController.workerTable(listOfWorkers, worker, primaryStage, "Fullname", "Email", "Phone", "Status","dateOfBirth", "salary");
+        workerTableView.setId("workerTableView");
 
         HBox workerBottomPane = new HBox(20);
         workerBottomPane.setPadding(new javafx.geometry.Insets(10, 10, 10, 0));
         workerBottomPane.setStyle(styles.getBtnPane());
 
         addWorkerBtn = new Button("Add Worker");
+        addWorkerBtn.setId("addWorkerBtn");
 
         if(!(worker.getAccessLevel() instanceof Administrator)){
             addWorkerBtn.setDisable(true);
@@ -247,7 +251,7 @@ public class MainPage{
                 System.out.println(content);
                 if(choice.equals("Title")){
                     System.out.println("hyri");
-                    Book book = listOfBooks.get(listOfBooks.indexOf(new Book(content, "", "", "", "", 0, false)));
+                    Book book = listOfBooks.get(listOfBooks.indexOf(SearchBarBookController.findBook(content, listOfBooks)));
                     System.out.println("U gjet libri" + book.getBookTitle());
                     BookInfoHolder.getChildren().add(getPurchaseBookPane(book));
                 }else if(choice.equals("Author")){
@@ -277,7 +281,7 @@ public class MainPage{
                 BookForm bookForm = new BookForm();
                 bookForm.newBookForm(primaryStage, worker, listOfBooks, listOfWorkers);
         });
-
+        bookTableView.setId("bookTableView");
         bookTableView.setOnMouseClicked(e -> {
             if(e.getClickCount() == 2){
                 Book book = bookTableView.getSelectionModel().getSelectedItem();
@@ -296,7 +300,7 @@ public class MainPage{
                 EmployeeInfoHolder.getChildren().add(getEmployeePane(employee));
             }
         });
-        
+        addBookToStockBtn.setId("addBookToStockBtn");
         addBookToStockBtn.setOnAction(e -> {
 
             for (Book book : booksToSell.keySet()) {
@@ -310,7 +314,7 @@ public class MainPage{
             primaryStage.setScene(new Scene(new MainPage(primaryStage, worker, listOfWorkers).getRoot(), 800, 600));
             primaryStage.setFullScreen(true);
        });
-
+        purchaseBookBtn.setId("purchaseBookBtn");
         purchaseBookBtn.setOnAction(e -> {
             System.out.println("BOOKS TO SELL" + booksToSell);
             for (Book book : booksToSell.keySet()) {
@@ -374,7 +378,7 @@ public class MainPage{
                 right.setRight(getRightBook());
             }
         });
-
+        EmployeeTab.setId("EmployeeTab");
         EmployeeTab.setOnSelectionChanged(e -> {
             if(EmployeeTab.isSelected()){
                 right.getChildren().clear();
@@ -453,6 +457,7 @@ public class MainPage{
         Label bookPrice = new Label("" + book.getBookPrice());
         bookPrice.setStyle(styles.getSalesLabel());
         TextField nrBooks = new TextField();
+        nrBooks.setId("nrBooks");
         nrBooks.setPrefHeight(20);
         nrBooks.setPrefWidth(50);
 
@@ -562,6 +567,7 @@ public class MainPage{
         newPhoneNumber.setStyle(styles.getLoginTextFieldStyle());
 
         Button deletWorkerBtn = new Button("Delete Worker");
+        deletWorkerBtn.setId("deletWorkerBtn");
         deletWorkerBtn.setStyle(styles.getLogOutBtnStyle());
         if(!(worker.getAccessLevel() instanceof Administrator)){
             deletWorkerBtn.setDisable(true);

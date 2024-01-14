@@ -27,7 +27,7 @@ public class TestFile {
         Worker manager = new Worker("manager", "Manager", "1", "0675850510", null, new Manager(), 700);
         Worker admin = new Worker("admin", "Admin", "1", "0675850510", null, new Administrator(), 1000);
         listOfWorkers = new ArrayList<>();
-        Worker[] workers = {librarian, manager, admin};
+        Worker[] workers = {admin, librarian, manager};
         listOfWorkers.addAll(List.of(workers));
         fileIoService = new MockFileIOService();
     }

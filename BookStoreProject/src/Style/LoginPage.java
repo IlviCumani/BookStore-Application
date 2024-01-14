@@ -1,26 +1,14 @@
 package Style;
 
-import java.io.IOException;
-
-import BookstoreData.BookData;
-import Staff.Admin;
-import Staff.Librarian;
-import Staff.Manager;
-import Staff.Worker;
-import Staff.WorkerData;
 import StyleControllers.LoginController;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -54,6 +42,7 @@ public class LoginPage{
         bottom.setPadding(new javafx.geometry.Insets(0, 0, 150, 0));
         LogInBtn.setPrefSize(100, 50);
         LogInBtn.setStyle(styles.getLoginBtnStyle());
+        LogInBtn.setId("logInButton");
         root.setBottom(bottom);
 
     
@@ -65,6 +54,8 @@ public class LoginPage{
         PasswordLabel.setStyle(styles.getLoginLabelStyle());
         TextField EmailTextField = new TextField();
         PasswordField PasswordTextField = new PasswordField();
+        EmailTextField.setId("emailTextField");
+        PasswordTextField.setId("passwordTextField");
         center.add(EmailLabel, 0, 0);
         center.add(EmailTextField, 0, 1);
         center.add(PasswordLabel, 0, 2);
