@@ -29,16 +29,19 @@ public class BookForm {
         pane.setStyle(settingStyles.getLoginRootStyle());
 
         TextField titleTF = new TextField();
+        titleTF.setId("titleTF");
         titleTF.setStyle(settingStyles.getLoginTextFieldStyle());
         titleTF.setPromptText("Title");
         Label titleLbl = new Label("Title");
 
         TextField isbnTF = new TextField();
+        isbnTF.setId("isbnTF");
         isbnTF.setStyle(settingStyles.getLoginTextFieldStyle());
         isbnTF.setPromptText("ISBN 13");
         Label isbnLbl = new Label("ISBN 13");
 
         TextField priceTF = new TextField();
+        priceTF.setId("priceTF");
         priceTF.setStyle(settingStyles.getLoginTextFieldStyle());
         priceTF.setPromptText("Price");
         Label priceLbl = new Label("Price");
@@ -50,26 +53,32 @@ public class BookForm {
         rbEbook.setStyle(settingStyles.getRadioBtn());
         ToggleGroup group = new ToggleGroup();
         rbPaperback.setToggleGroup(group);
+        rbEbook.setId("rbEbook");
+        rbPaperback.setId("rbPaperback");
         rbEbook.setToggleGroup(group);
         HBox hbox = new HBox(10);
         hbox.getChildren().addAll(rbPaperback, rbEbook);
 
         Label authosLbl = new Label("Select an author: ");
         TextField authorTF = new TextField();
+        authorTF.setId("authorTF");
         authorTF.setStyle(settingStyles.getLoginTextFieldStyle());
         authorTF.setPromptText("Author");
 
         Label genreLbl = new Label("Genres: ");
         TextField genreTF = new TextField();
+        genreTF.setId("genreTF");
         genreTF.setStyle(settingStyles.getLoginTextFieldStyle());
         genreTF.setPromptText("Genres");
 
         Label publisherLbl = new Label("Publisher: ");
         TextField publisherTF = new TextField();
+        publisherTF.setId("publisherTF");
         publisherTF.setStyle(settingStyles.getLoginTextFieldStyle());
         publisherTF.setPromptText("Publisher");
 
         Button submitBtn = new Button("Submit");
+        submitBtn.setId("submitBtn");
         submitBtn.setStyle(settingStyles.getLogOutBtnStyle());
 
 
