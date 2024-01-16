@@ -23,7 +23,7 @@ public class TestAddWorkerFx extends TestAbstractLogInSetup{
     public final String locationChoiceBox = "#locationChoiceBox";
 
 
-    public String[] names = {"Nomi_Adm", "Nomi_Mng", "Nomi_Lib"};
+    public String[] names = {"Ilvi", "Erli", "Nomi"};
     void createNewWorker(String role, String nameAndEmail) {
         this.adminLogIn();
         clickOn(EmployeeTab);

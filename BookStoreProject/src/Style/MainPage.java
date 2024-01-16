@@ -506,7 +506,9 @@ public class MainPage{
 
         workerEmail = new Label(tempworker.getEmail());
         workerEmail.setStyle(styles.getSalesLabel());
+        workerEmail.setId("workerEmail");
         TextField newEmail = new TextField();
+        newEmail.setId("newEmail");
         newEmail.setStyle(styles.getLoginTextFieldStyle());
                         
         ChoiceBox<String> newAccessLevelString = new ChoiceBox<>();
@@ -514,6 +516,7 @@ public class MainPage{
         newAccessLevelString.getItems().addAll("Librarian", "Manager", "Administrator");//! Check this out later
         newAccessLevelString.setStyle(styles.getSearchListStyle());
         newAccessLevelString.setValue(tempworker.getAccessLevelName());
+        newAccessLevelString.setId("newAccessLevelString");
 
         newAccessLevelString.setOnKeyPressed(e-> {
             if(KeyCode.ENTER == e.getCode()){
@@ -557,13 +560,17 @@ public class MainPage{
 //        });
 
         workerSalary = new Label("" + tempworker.getSalary());
+        workerSalary.setId("workerSalary");
         workerSalary.setStyle(styles.getSalesLabel());
         TextField newSalary = new TextField();
+        newSalary.setId("newSalary");
         newSalary.setStyle(styles.getLoginTextFieldStyle());
 
         workerPhoneNumber = new Label(tempworker.getPhone());
+        workerPhoneNumber.setId("workerPhoneNumber");
         workerPhoneNumber.setStyle(styles.getSalesLabel());
         TextField newPhoneNumber = new TextField();
+        newPhoneNumber.setId("newPhoneNumber");
         newPhoneNumber.setStyle(styles.getLoginTextFieldStyle());
 
         Button deletWorkerBtn = new Button("Delete Worker");
@@ -573,6 +580,7 @@ public class MainPage{
             deletWorkerBtn.setDisable(true);
         }
         Button editWorkerBtn = new Button("Edit Worker");
+        editWorkerBtn.setId("editWorkerBtn");
         editWorkerBtn.setStyle(styles.getLogOutBtnStyle());
         if(!(worker.getAccessLevel() instanceof Administrator)){
             editWorkerBtn.setDisable(true);

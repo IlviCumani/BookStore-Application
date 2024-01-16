@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 public class TestDeleteWorkerFX extends TestAbstractLogInSetup{
+
     private final String deletWorkerBtn = "#deletWorkerBtn";
 
     private final String workerTableView = "#workerTableView";
@@ -36,16 +37,11 @@ public class TestDeleteWorkerFX extends TestAbstractLogInSetup{
 
     @Test
     void test_deleteWorker() {
-        this.actionOnWorker("#Nomi_Mng");
+        this.actionOnWorker("#Ilvi");
         clickOn(deletWorkerBtn);
         sleep(1000);
         clickOn(EmployeeTab);
         sleep(3000);
-
-    }
-
-    @Test
-    void test_editWorker() {
 
     }
 }
