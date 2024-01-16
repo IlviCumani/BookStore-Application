@@ -3,5 +3,4 @@ Today's date:	Bill of the Books
 Today's date:
 Books sold: 
 		Book Title	isbn13	Price	Copies	Total
-		Pride and Prejudice	9780143105428	9.99	22	219.78
-219.78
+0.0

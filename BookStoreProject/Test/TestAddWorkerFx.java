@@ -22,8 +22,13 @@ public class TestAddWorkerFx extends TestAbstractLogInSetup{
 
     public final String locationChoiceBox = "#locationChoiceBox";
 
+    private final String workerTableView = "#workerTableView";
+    private final String deletWorkerBtn = "#deletWorkerBtn";
 
-    public String[] names = {"Ilvi", "Erli", "Nomi"};
+
+
+
+    public String[] names = {"Ilvi1", "Erli", "Nomi", "Librarian"};
     void createNewWorker(String role, String nameAndEmail) {
         this.adminLogIn();
         clickOn(EmployeeTab);
@@ -61,13 +66,35 @@ public class TestAddWorkerFx extends TestAbstractLogInSetup{
 
     @Test
     void createNewManager() {
+
         this.createNewWorker("Manager", names[1]);
     }
 
     @Test
     void createNewLibrarian() {
         this.createNewWorker("Librarian", names[2]);
+
+    }
+    void actionOnWorker(String email){
+        this.adminLogIn();
+        clickOn(EmployeeTab);
+//        System.out.println(workerTableView);
+        sleep(1000);
+//        doubleClickOn((Node) lookup("table-row-cell").nth(1).query());
+        clickOn(workerTableView);
+        doubleClickOn(email);
+        sleep(1000);
+
     }
 
+    @Test
+    void test_deleteWorker() {
+
+        this.actionOnWorker("#Librarian");
+        clickOn(deletWorkerBtn);
+        sleep(1000);
+        clickOn(EmployeeTab);
+        sleep(3000);
+    }
 
 }

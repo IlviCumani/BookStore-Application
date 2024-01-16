@@ -75,7 +75,7 @@ public class TestEditWorkerFX extends TestAbstractLogInSetup{
 
     @Test
     void test_changeWorker() {
-        String email = "aasasd";
+        String email = "Manager";
         System.out.println(email);
         this.actionOnWorker("#" + email);
         sleep(3000);
@@ -109,6 +109,7 @@ public class TestEditWorkerFX extends TestAbstractLogInSetup{
 
 //       write(findWorker(email).getEmail() + "a");
     }
+
 
     @AfterEach
     void clickOnEmployeeTab() {

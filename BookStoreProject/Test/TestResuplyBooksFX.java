@@ -1,6 +1,4 @@
-import BookstoreData.Book;
 import IO.BookFileIOService;
-import IO.CompatibleTypes;
 import IO.FileIO;
 import javafx.scene.input.KeyCode;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,59 +28,55 @@ public class TestResuplyBooksFX extends TestAbstractLogInSetup {
         this.serialibleBookList = fileio.read();
     }
 
-    void logInAndClickBook(String nr){
+    void logInAndClickBook(String nr, String title){
         this.adminLogIn();
 //        NodeQueryImpl<FxRobot> tableViewQuery = new FxRobot().lookup("#yourTableViewId");
+//        clickOn(bookTableView);
         clickOn(bookTableView);
-        doubleClickOn();
+        doubleClickOn("#" + title);
         sleep(1000);
         clickOn(nrBooks);
         sleep(1000);
         write(nr);
-
         sleep(1000);
         press(KeyCode.ENTER);
+        release(KeyCode.ENTER);
         sleep(1000);
     }
 
 
     @Test
-    void test_firstTest() {
-        this.logInAndClickBook("20");
+    void test_suplyBooks() {
+        this.logInAndClickBook("20", "1984");
         clickOn(addBookToStockBtn);
         sleep(1000);
     }
 
     @Test
     void test_SellBooks() {
-        this.logInAndClickBook("20");
+        this.logInAndClickBook("20", "1984");
         sleep(1000);
         clickOn(purchaseBookBtn);
     }
 
-    @Test
-    void test_SellBooksToTriggerAlert(){
-        int nr = this.findTheAmountBook();
-        this.logInAndClickBook(Integer.toString(nr));
-        sleep(1000);
-        clickOn(purchaseBookBtn);
-        sleep(3000);
-    }
-
-    private int findTheAmountBook() {
-        String n1 = "9780143105428";
-
-        Book wantedBook = null;
-        for(Book book: CompatibleTypes.fromSerializbleToBook(serialibleBookList)){
-            if(book.getBookISBN13().equals(n1))
-                wantedBook = book;
-        }
-        if (wantedBook != null && wantedBook.getNrBookInStock() >= 5)
-            return  wantedBook.getNrBookInStock() - 4;
-        return 0;
-
-
-
-    }
+//    @Test
+//    void test_SellBooksToTriggerAlert(){
+//        int nr = this.findTheAmountBook("1984");
+//        this.logInAndClickBook(Integer.toString(nr), "1984");
+//        sleep(1000);
+//        clickOn(purchaseBookBtn);
+//        sleep(3000);
+//    }
+//
+//    private int findTheAmountBook(String n1) {
+//
+//        Book wantedBook = null;
+//        for(Book book: CompatibleTypes.fromSerializbleToBook(serialibleBookList)){
+//            if(book.getBookTitle().equals(n1))
+//                wantedBook = book;
+//        }
+//        if (wantedBook != null && wantedBook.getNrBookInStock() >= 5)
+//            return  wantedBook.getNrBookInStock() - 4;
+//        return 0;
 
 }

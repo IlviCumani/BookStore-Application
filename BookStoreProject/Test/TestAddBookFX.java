@@ -30,7 +30,7 @@ public class TestAddBookFX extends TestAbstractLogInSetup{
     @BeforeEach
     void newsetUp() {
         books.add( new Book(
-                "The Gulag Archipelago",
+                "The Gulag Archipelago1",
                 "978-0-06-125379-4",
                 "Aleksandr Solzhenitsyn",
                 "Non-Fiction",

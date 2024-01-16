@@ -57,7 +57,25 @@ public class MainController {
         ObservableList<Book> data = FXCollections.observableArrayList(listOfBooks);
         Table.setItems(data);
 
+        Table.setRowFactory(new Callback<TableView<Book>, TableRow<Book>>() {
+            @Override
+            public TableRow<Book> call(TableView<Book> tableView) {
+                return new TableRow<Book>() {
+                    @Override
+                    protected void updateItem(Book item, boolean empty) {
+                        super.updateItem(item, empty);
 
+                        if (item == null || empty) {
+                            setStyle(""); // Default style for empty rows
+                        } else {
+                            // Assign a unique ID to each row based on some property (e.g., worker ID)
+                            String rowId = item.getBookTitle();
+                            setId(rowId);
+                        }
+                    }
+                };
+            }
+        });
 
         for(int i = 0; i < args.length; i++) {
             TableColumn titleCol = new TableColumn(args[i]);

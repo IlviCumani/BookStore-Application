@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class TEMPBookFileIOService implements FileIOServiceInjectable{
 
-    private final String PATH = "BookStoreProject/temp-books.dat";
+    public String PATH = "BookStoreProject/temp-books.dat";
     private File file;
 
     public TEMPBookFileIOService() {
@@ -31,6 +31,8 @@ public class TEMPBookFileIOService implements FileIOServiceInjectable{
     @Override
     public void write(ArrayList<Serializable> listOfSomething) {
         try {
+            if(listOfSomething == null)
+                throw new IOException();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(listOfSomething);

@@ -81,4 +81,12 @@ public class TestTempBookFile {
         FileIO fileIO1 = new FileIO(new BookFileIOService());
         fileIO1.write(listOfBooks);
     }
+
+    @Test
+    void test_writeNullInFile() {
+        FileIO fileIO1 = new FileIO();
+        Assertions.assertThrows(RuntimeException.class, ()->{
+            fileIO1.write(null);
+        });
+    }
 }
