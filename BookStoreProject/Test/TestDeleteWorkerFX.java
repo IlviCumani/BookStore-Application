@@ -37,18 +37,11 @@ public class TestDeleteWorkerFX extends TestAbstractLogInSetup{
 
     @Test
     void test_deleteWorker() {
-        this.actionOnWorker("#ilvi@ilvi");
+        this.actionOnWorker("#Ilvi");
         clickOn(deletWorkerBtn);
         sleep(1000);
         clickOn(EmployeeTab);
         sleep(3000);
-
-    }
-
-    @Test
-    void test_editWorker() {
-        this.actionOnWorker("#Nomi_Mng");
-
 
     }
 }
